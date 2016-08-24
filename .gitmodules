@@ -1,0 +1,6 @@
+[submodule "module/astarcpp"]
+	path = module/astarcpp
+	url = git@github.com:alesegdia/astarcpp.git
+[submodule "module/alligator"]
+	path = module/alligator
+	url = git@github.com:alesegdia/alligator.git
