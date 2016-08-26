@@ -1,33 +1,47 @@
 cmake_minimum_required(VERSION 2.6)
 project(LD36)
 
+# load & include alligator
 add_subdirectory(module/alligator/)
-
-list(APPEND CMAKE_CXX_FLAGS "-std=c++11 -g -ftest-coverage -fprofile-arcs")
-
-file(GLOB_RECURSE CPPs src/**/*.cpp)
-file(GLOB_RECURSE HPPs src/**/*.h)
-
 include_directories(module/alligator/src)
 
+# common flags
+list(APPEND CMAKE_CXX_FLAGS "-std=c++11 -g -ftest-coverage -fprofile-arcs")
+
+# core sources
+file(GLOB_RECURSE CORE_CPP src/core/*.cpp)
+file(GLOB_RECURSE CORE_HEADERS src/core/*.h)
+set(CORE_SOURCES ${CORE_CPP} ${CORE_HEADERS})
+
+
+# SO dependant
 if(WIN32)
-	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin/win32)
 	list(APPEND CMAKE_EXE_LINKER_FLAGS "-static-libstdc++ -static-libgcc")
-	add_executable(ld35-w32 ${CPPs} ${HPPs} src/main.cpp)
-	target_link_libraries(ld35-w32 alligator)
-	target_link_libraries(ld35-w32 allegro-5.0.10-monolith-mt)
+	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin/win32)
 elseif(UNIX)
 	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin/linux)
-	add_executable(ld35 ${CPPs} ${HPPs} src/main.cpp)
-	include_directories(ld35 ${ALLIGATOR_INCLUDES})
-	target_link_libraries(ld35 alligator)
-	target_link_libraries(ld35 allegro)
-	target_link_libraries(ld35 allegro_image)
-	target_link_libraries(ld35 allegro_primitives)
-	target_link_libraries(ld35 allegro_font)
-	target_link_libraries(ld35 allegro_ttf)
-	target_link_libraries(ld35 allegro_audio)
-	target_link_libraries(ld35 allegro_acodec)
 endif()
+
+# add a new target with allegro, alligator and core sources. uses monolith for win32
+function(add_alleg_target EXEC-NAME SRCS)
+	add_executable(${EXEC-NAME} ${CORE_SOURCES} ${SRCS})
+	target_link_libraries(${EXEC-NAME} alligator)
+	if(WIN32)
+		target_link_libraries(${EXEC-NAME} allegro_monolith)
+	elseif(UNIX)
+		target_link_libraries(${EXEC-NAME} allegro)
+		target_link_libraries(${EXEC-NAME} allegro_image)
+		target_link_libraries(${EXEC-NAME} allegro_primitives)
+		target_link_libraries(${EXEC-NAME} allegro_font)
+		target_link_libraries(${EXEC-NAME} allegro_ttf)
+		target_link_libraries(${EXEC-NAME} allegro_audio)
+		target_link_libraries(${EXEC-NAME} allegro_acodec)
+	else()
+		message(SEND_FATAL "Unknown platform")
+	endif()
+endfunction(add_alleg_target)
+
+add_alleg_target(ld36 src/game/game.cpp)
+add_alleg_target(editor src/editor/editor.cpp)
 
 
