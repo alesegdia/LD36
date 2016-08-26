@@ -1,9 +1,9 @@
-#include "game/ld36game.h"
-#include "game/gameconfig.h"
+#include "../core/ld36game.h"
+#include "../core/gameconfig.h"
 
 int main(int argc, char** argv) {
 	LD36 tsr(	GameConfig::WINDOW_WIDTH	* GameConfig::CAMERA_SCALE,
-					GameConfig::WINDOW_HEIGHT	* GameConfig::CAMERA_SCALE	);
+				GameConfig::WINDOW_HEIGHT	* GameConfig::CAMERA_SCALE	);
 	tsr.exec();
 	return 0;
 }

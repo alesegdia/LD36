@@ -3,10 +3,13 @@
 
 #include <allegro5/allegro_ttf.h>
 
+#include "screen/menuscreen.h"
+#include "screen/mapscreen.h"
+
 #include "gameconfig.h"
 
-LD36::LD36(int sw, int sh)
-	: Game( sw, sh ), m_camera1(Vec2f(sw, sh)), m_camera2(Vec2f(sw, sh)), m_camera3(Vec2f(sw, sh))
+LD36::LD36(int sw, int sh, bool editor)
+	: Game( sw, sh ), m_camera1(Vec2f(sw, sh)), m_camera2(Vec2f(sw, sh)), m_camera3(Vec2f(sw, sh)), m_editor(editor)
 {
 
 }
@@ -32,6 +35,7 @@ void LD36::create()
 	}
 
 	m_menuScreen.reset(new MenuScreen(this));
+	m_mapScreen.reset(new MapScreen(this));
 
 	setScreen(m_menuScreen);
 }
@@ -40,6 +44,7 @@ void LD36::dispose()
 {
 	Assets::Dispose();
 	m_menuScreen.reset();
+	m_mapScreen.reset();
 	al_destroy_font(m_font);
 	al_destroy_font(m_fontBig);
 }
@@ -50,6 +55,10 @@ void LD36::update(double delta)
 	if( Input::IsKeyJustPressed(ALLEGRO_KEY_F1) )
 	{
 		setScreen(m_menuScreen);
+	}
+	else if( Input::IsKeyJustPressed(ALLEGRO_KEY_F2) )
+	{
+		setScreen(m_mapScreen);
 	}
 
 	if( Input::IsKeyJustPressed(ALLEGRO_KEY_ESCAPE) )

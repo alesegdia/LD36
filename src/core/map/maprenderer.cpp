@@ -108,3 +108,4 @@ void TileMapRenderer::renderCell(int x, int y, int cell_value)
 				   x * al_get_bitmap_width(m_tiles[cell_value]),
 				   y * al_get_bitmap_height(m_tiles[cell_value]), 0);
 }
+

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <allegro5/allegro.h>
@@ -9,13 +8,14 @@
 #include <alligator/game/iscreen.h>
 #include <alligator/camera/camera.h>
 
-#include "screen/menuscreen.h"
+class MenuScreen;
+class MapScreen;
 
 class LD36 : public Game {
 
 public:
 
-	LD36 ( int sw, int sh );
+	LD36 ( int sw, int sh, bool editor = false );
 	virtual ~LD36();
 
 	void create() override ;
@@ -24,6 +24,7 @@ public:
 
 	// all screens
 	std::shared_ptr<MenuScreen> m_menuScreen;
+	std::shared_ptr<MapScreen> m_mapScreen;
 
 	ALLEGRO_FONT* m_font = nullptr;
 	ALLEGRO_FONT* m_fontBig = nullptr;
@@ -31,6 +32,9 @@ public:
 	Camera m_camera1;
 	Camera m_camera2;
 	Camera m_camera3;
+
+private:
+	bool m_editor;
 
 };
 
