@@ -32,7 +32,7 @@ void MenuScreen::update(double delta)
 void MenuScreen::render()
 {
 
-	m_game->m_camera2.bind();
+	m_game->m_camera2->bind();
 
 	al_clear_to_color(al_map_rgb(63,63,116));
 	al_set_target_bitmap(al_get_backbuffer(m_game->display()));
