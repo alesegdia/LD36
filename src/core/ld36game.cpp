@@ -37,7 +37,7 @@ void LD36::create()
 	m_menuScreen.reset(new MenuScreen(this));
 	m_mapScreen.reset(new MapScreen(this));
 
-	setScreen(m_menuScreen);
+	setScreen(m_mapScreen);
 }
 
 void LD36::dispose()

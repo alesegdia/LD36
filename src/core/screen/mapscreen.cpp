@@ -29,7 +29,8 @@ MapScreen::MapScreen( LD36* g )
 								  0,1,1,1,3,3,1,1,1,0,
 								  0,0,0,0,0,0,0,0,0,0,
 							  }));
-	m_mapRenderer.reset(new IsometricTileMapRenderer(m_map, Assets::instance->mapTiles, 32));
+	m_mapRenderer.reset(new IsometricTileMapRenderer(m_map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
+	m_gameMap.reset(new Map(m_map));
 }
 
 MapScreen::~MapScreen()
@@ -47,7 +48,7 @@ void MapScreen::update(double delta)
 	const float MoveSpeed = 8.f;
 	float dx, dy;
 	dx = dy = 0;
-	const float portion = GameConfig::WINDOW_WIDTH * GameConfig::CAMERA_SCALE / 6;
+	const float portion = GameConfig::WINDOW_WIDTH / 16;
 
 	if( Input::IsKeyDown(ALLEGRO_KEY_RIGHT) || (m_enableMouseTravel && Input::GetMousePosition().x() > GameConfig::WINDOW_WIDTH * GameConfig::CAMERA_SCALE - portion) )
 	{
@@ -60,11 +61,11 @@ void MapScreen::update(double delta)
 
 	if( Input::IsKeyDown(ALLEGRO_KEY_UP) || (m_enableMouseTravel && Input::GetMousePosition().y() < portion) )
 	{
-		dy = MoveSpeed;
+		dy = MoveSpeed / 2;
 	}
 	else if( Input::IsKeyDown(ALLEGRO_KEY_DOWN) || (m_enableMouseTravel && Input::GetMousePosition().y() > GameConfig::WINDOW_HEIGHT * GameConfig::CAMERA_SCALE - portion) )
 	{
-		dy = -MoveSpeed;
+		dy = -MoveSpeed / 2;
 	}
 
 	m_game->m_camera2.move( dx, dy );
@@ -72,11 +73,7 @@ void MapScreen::update(double delta)
 	if( Input::IsMouseButtonPressed(1) )
 	{
 		Vec2i pos = m_mapRenderer->getTileAtIso(Input::GetMousePosition() + Vec2i(-m_game->m_camera2.x(), -m_game->m_camera2.y()));
-		if( pos.x() >= 0 && pos.x() < m_map->cols() &&
-			pos.y() >= 0 && pos.y() < m_map->rows() )
-		{
-			m_map->set( pos.x(), pos.y(), 3 );
-		}
+		m_gameMap->setTile( pos, 3 );
 	}
 
 }

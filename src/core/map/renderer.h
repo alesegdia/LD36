@@ -9,6 +9,8 @@
 #include <alligator/util/matrix.h>
 #include <alligator/util/math.h>
 
+#include "isometrictranslator.h"
+
 class MapRenderer
 {
 public:
@@ -115,33 +117,18 @@ public:
 
 	void renderCell( int x, int y, int cell_value ) override
 	{
-		float xx, yy;
+		float ortho_x, ortho_y;
 
-		xx = x * m_tileHeight / 2.f;
-		yy = y * m_tileHeight / 2.f;
+		ortho_x = (x * m_tileHeight) / 2;
+		ortho_y = (y * m_tileHeight) / 2;
 
-		float xxx, yyy;
-
-		xxx = xx - yy;
-		yyy = (xx + yy) / 2.f;
-
-		al_draw_bitmap(	m_tiles[cell_value], xxx, yyy, 0 );
-	}
-
-	Vec2i isoToOrtho( const Vec2i& vec )
-	{
-		return Vec2i( (2 * vec.y() + vec.x()) / int(m_tileHeight),
-					  (2 * vec.y() - vec.x()) / int(m_tileHeight));
+		Vec2i iso = ortho_to_iso(Vec2i(ortho_x, ortho_y));
+		al_draw_bitmap(	m_tiles[cell_value], iso.x(), iso.y(), 0 );
 	}
 
 	Vec2i getTileAtIso( const Vec2i& vec )
 	{
-		Vec2i scaled_pos = vec;
-		scaled_pos.x(vec.x() / 4.f - 32);
-		scaled_pos.y(vec.y() / 4.f + 8);
-		Vec2i ortho = isoToOrtho(scaled_pos);
-		ortho.y(ortho.y() - 1);
-		return ortho;
+		return get_tile_at_iso(vec);
 	}
 
 	/*

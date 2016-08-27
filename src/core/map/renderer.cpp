@@ -1,4 +1,4 @@
-#include "maprenderer.h"
+#include "renderer.h"
 
 MapRenderer::MapRenderer(Matrix2Di::SharedPtr map, int ext)
 	: m_map(map), m_visible(new Matrix2Di(map->rows(), map->cols(), 0)), ext(ext)
