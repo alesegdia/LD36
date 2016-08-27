@@ -7,8 +7,8 @@
 #include <alligator/input/input.h>
 #include <alligator/util/matrix.h>
 
-#include "../map/map.h"
-#include "../map/renderer.h"
+#include "../scene/scene.h"
+#include "../scene/renderer.h"
 
 class LD36;
 
@@ -26,9 +26,8 @@ public:
 private:
 
 	LD36* m_game;
-	Matrix2Di::SharedPtr m_map;
 	IsometricTileMapRenderer::SharedPtr m_mapRenderer;
-	Map::SharedPtr m_gameMap;
+	Scene::SharedPtr m_gameMap;
 	bool m_enableMouseTravel = false;
 
 };

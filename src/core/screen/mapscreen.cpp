@@ -17,7 +17,7 @@
 MapScreen::MapScreen( LD36* g )
 	: m_game(g)
 {
-	m_map.reset(new Matrix2Di(10, 10, {
+	Matrix2Di::SharedPtr map( new Matrix2Di(10, 10, {
 								  0,0,0,0,0,0,0,0,0,0,
 								  0,1,1,1,0,0,1,1,1,0,
 								  0,1,2,0,0,0,0,2,1,0,
@@ -29,8 +29,8 @@ MapScreen::MapScreen( LD36* g )
 								  0,1,1,1,3,3,1,1,1,0,
 								  0,0,0,0,0,0,0,0,0,0,
 							  }));
-	m_mapRenderer.reset(new IsometricTileMapRenderer(m_map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
-	m_gameMap.reset(new Map(m_map));
+	m_mapRenderer.reset(new IsometricTileMapRenderer(map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
+	m_gameMap.reset(new Scene(map));
 }
 
 MapScreen::~MapScreen()
@@ -80,14 +80,11 @@ void MapScreen::update(double delta)
 
 void MapScreen::render()
 {
-
-	m_game->m_camera2.bind();
-
 	al_clear_to_color(al_map_rgb(255,255,255));
 	al_set_target_bitmap(al_get_backbuffer(m_game->display()));
 
+	m_game->m_camera2.bind();
 	m_mapRenderer->render();
-
 }
 
 void MapScreen::hide()

@@ -6,12 +6,12 @@
 
 #include "entity.h"
 
-class Map
+class Scene
 {
 public:
-	typedef std::shared_ptr<Map> SharedPtr;
+	typedef std::shared_ptr<Scene> SharedPtr;
 
-	Map( Matrix2Di::SharedPtr map )
+	Scene( Matrix2Di::SharedPtr map )
 		: m_map(map)
 	{
 
