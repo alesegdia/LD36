@@ -9,6 +9,7 @@
 
 #include "../scene/scene.h"
 #include "../scene/renderer.h"
+#include "../scene/spawner.h"
 
 class LD36;
 
@@ -25,10 +26,14 @@ public:
 
 private:
 
+	typedef std::function<void(Spawner*, const Vec2i&)> SpawnerTool;
+	typedef std::vector<SpawnerTool> ToolSet;
+
 	LD36* m_game;
-	IsometricTileMapRenderer::SharedPtr m_mapRenderer;
 	Scene::SharedPtr m_gameMap;
-	bool m_enableMouseTravel = false;
+	bool m_enableMouseTravel = true;
+	ToolSet m_callbackList;
+	Spawner::SharedPtr m_spawner;
 
 };
 

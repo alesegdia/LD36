@@ -126,11 +126,6 @@ public:
 		al_draw_bitmap(	m_tiles[cell_value], iso.x(), iso.y(), 0 );
 	}
 
-	Vec2i getTileAtIso( const Vec2i& vec )
-	{
-		return get_tile_at_iso(vec);
-	}
-
 	/*
 	void render() override
 	{

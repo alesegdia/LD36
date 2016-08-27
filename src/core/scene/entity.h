@@ -16,12 +16,14 @@ public:
 		: m_sprite(sprite),
 		  m_position(position)
 	{
-
+		std::cout << "Done at " << m_position.x() << ", " << m_position.y() << std::endl;
+		computeTile();
 	}
 
 	void render()
 	{
-		al_draw_bitmap(m_sprite, m_position.x(), m_position.y(), 0);
+		Vec2i iso = ortho_to_iso(Vec2i(m_position.x() - 16, m_position.y() - 16));
+		al_draw_bitmap(m_sprite, iso.x(), iso.y(), 0);
 	}
 
 	int renderOrder()
@@ -31,7 +33,17 @@ public:
 
 	void computeTile()
 	{
-		m_tile = get_tile_at_iso(Vec2i(int(m_position.x()), int(m_position.y())));
+		m_tile = Vec2i(int(m_position.x() / 16.f), int(m_position.y() / 16.f));
+	}
+
+	const Vec2i& tile()
+	{
+		return m_tile;
+	}
+
+	const Vec2f& position()
+	{
+		return m_position;
 	}
 
 private:
