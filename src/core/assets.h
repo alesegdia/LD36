@@ -21,8 +21,10 @@ public:
 	~Assets();
 
 	ALLEGRO_BITMAP* tilesetBitmap;
+	ALLEGRO_BITMAP* charactersBitmap;
 
 	Spritesheet::SharedPtr tilesetSheet;
+	Spritesheet::SharedPtr charactersSheet;
 
 	std::vector<ALLEGRO_BITMAP*> mapTiles;
 

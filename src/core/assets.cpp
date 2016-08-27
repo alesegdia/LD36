@@ -9,6 +9,9 @@ Assets::Assets()
 	tilesetBitmap = al_load_bitmap("assets/tileset.png");
 	tilesetSheet.reset(new Spritesheet(2, 2, tilesetBitmap));
 	mapTiles = tilesetSheet->getAllFrames();
+
+	charactersBitmap = al_load_bitmap("assets/characters.png");
+	charactersSheet.reset( new Spritesheet( 3, 3, charactersBitmap ));
 }
 
 Assets::~Assets()
