@@ -29,9 +29,9 @@ public:
 	ALLEGRO_FONT* m_font = nullptr;
 	ALLEGRO_FONT* m_fontBig = nullptr;
 
-	Camera m_camera1;
-	Camera m_camera2;
-	Camera m_camera3;
+	Camera::SharedPtr m_camera1;
+	Camera::SharedPtr m_camera2;
+	Camera::SharedPtr m_camera3;
 
 private:
 	bool m_editor;

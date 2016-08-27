@@ -9,7 +9,11 @@
 #include "gameconfig.h"
 
 LD36::LD36(int sw, int sh, bool editor)
-	: Game( sw, sh ), m_camera1(Vec2f(sw, sh)), m_camera2(Vec2f(sw, sh)), m_camera3(Vec2f(sw, sh)), m_editor(editor)
+	: Game( sw, sh ),
+	  m_camera1(new Camera(Vec2f(sw, sh))),
+	  m_camera2(new Camera(Vec2f(sw, sh))),
+	  m_camera3(new Camera(Vec2f(sw, sh))),
+	  m_editor(editor)
 {
 
 }
@@ -23,9 +27,9 @@ void LD36::create()
 {
 	Assets::Initialize();
 
-	m_camera1.scale(GameConfig::CAMERA_SCALE, GameConfig::CAMERA_SCALE);
-	m_camera2.scale(GameConfig::CAMERA_SCALE, GameConfig::CAMERA_SCALE);
-	m_camera3.scale(GameConfig::CAMERA_SCALE, GameConfig::CAMERA_SCALE);
+	m_camera1->scale(GameConfig::CAMERA_SCALE, GameConfig::CAMERA_SCALE);
+	m_camera2->scale(GameConfig::CAMERA_SCALE, GameConfig::CAMERA_SCALE);
+	m_camera3->scale(GameConfig::CAMERA_SCALE, GameConfig::CAMERA_SCALE);
 
 	m_font = al_load_ttf_font("assets/dafont.ttf", 8, 0);
 	m_fontBig = al_load_ttf_font("assets/dafont.ttf", 16, 0);
@@ -38,6 +42,8 @@ void LD36::create()
 	m_mapScreen.reset(new MapScreen(this));
 
 	setScreen(m_mapScreen);
+
+	ungrabMouse();
 }
 
 void LD36::dispose()
@@ -59,6 +65,14 @@ void LD36::update(double delta)
 	else if( Input::IsKeyJustPressed(ALLEGRO_KEY_F2) )
 	{
 		setScreen(m_mapScreen);
+	}
+	else if( Input::IsKeyJustPressed(ALLEGRO_KEY_O) )
+	{
+		grabMouse();
+	}
+	else if( Input::IsKeyJustPressed(ALLEGRO_KEY_P) )
+	{
+		ungrabMouse();
 	}
 
 	if( Input::IsKeyJustPressed(ALLEGRO_KEY_ESCAPE) )
