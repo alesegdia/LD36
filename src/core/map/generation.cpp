@@ -1,5 +1,5 @@
 
-#include "mapgen.h"
+#include "generation.h"
 
 RandomWalkerGenerator::RandomWalkerGenerator() : m_outputMap(0,0) {}
 
