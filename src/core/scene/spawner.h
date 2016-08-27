@@ -15,9 +15,29 @@ public:
 
 	}
 
-	void spawnEnemy1( Vec2i tile_pos )
+	void spawnSlime( Vec2i tile_pos )
+	{
+		Entity::SharedPtr entity = makeEntityAtTile(Assets::instance->charactersSheet->getFrame(0, 0), tile_pos);
+	}
+
+	void spawnSnake( Vec2i tile_pos )
 	{
 		Entity::SharedPtr entity = makeEntityAtTile(Assets::instance->charactersSheet->getFrame(1, 0), tile_pos);
+	}
+
+	void spawnGod( Vec2i tile_pos )
+	{
+		Entity::SharedPtr entity = makeEntityAtTile(Assets::instance->charactersSheet->getFrame(2, 0), tile_pos);
+	}
+
+	void spawnDemon( Vec2i tile_pos )
+	{
+		Entity::SharedPtr entity = makeEntityAtTile(Assets::instance->charactersSheet->getFrame(0, 1), tile_pos);
+	}
+
+	void spawnMagetoball( Vec2i tile_pos )
+	{
+		Entity::SharedPtr entity = makeEntityAtTile(Assets::instance->charactersSheet->getFrame(1, 1), tile_pos);
 	}
 
 private:

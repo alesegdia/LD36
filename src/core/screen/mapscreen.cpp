@@ -31,26 +31,14 @@ MapScreen::MapScreen( LD36* g )
 								  0,0,0,0,0,0,0,0,0,0,
 							  }));
 	m_gameMap.reset(new Scene(map, m_game->m_camera2));
-	Entity::SharedPtr test_entity( new Entity(Assets::instance->charactersSheet->getFrame(0,0)) );
-	m_gameMap->addPlayerEntity(test_entity);
-
-	test_entity.reset( new Entity(Assets::instance->charactersSheet->getFrame(0,1), Vec2f(0, 16)) );
-	m_gameMap->addPlayerEntity(test_entity);
-
-	test_entity.reset( new Entity(Assets::instance->charactersSheet->getFrame(1,0), Vec2f(16, 0)) );
-	m_gameMap->addPlayerEntity(test_entity);
-
-	test_entity.reset( new Entity(Assets::instance->charactersSheet->getFrame(1,1), Vec2f(16, 16)) );
-	m_gameMap->addPlayerEntity(test_entity);
-
-	test_entity.reset( new Entity(Assets::instance->charactersSheet->getFrame(2,0), Vec2f(-16, -16)) );
-	m_gameMap->addPlayerEntity(test_entity);
-
 	m_spawner.reset(new Spawner(m_gameMap));
 
-	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){
-		spawner->spawnEnemy1( pos );
-	});
+	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnSlime( pos ); });
+	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnSnake( pos ); });
+	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnGod( pos ); });
+	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnDemon( pos ); });
+	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnMagetoball( pos ); });
+
 }
 
 MapScreen::~MapScreen()
@@ -90,12 +78,24 @@ void MapScreen::update(double delta)
 
 	m_game->m_camera2->move( dx, dy );
 
+	if( Input::IsKeyJustPressed(ALLEGRO_KEY_Q) )
+	{
+		m_selectedSpawner = (m_selectedSpawner + 1) % m_callbackList.size();
+		printf("HEY!\n");
+		fflush(stdin);
+	}
+
+	if( Input::IsKeyJustPressed(ALLEGRO_KEY_E))
+	{
+		m_selectedSpawner = std::max(0, m_selectedSpawner - 1);
+	}
+
 	if( Input::IsMouseButtonPressed(1) )
 	{
 		Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
 		if( m_gameMap->isWalkableTile(tile) )
 		{
-			m_callbackList[0](m_spawner.get(), tile);
+			m_callbackList[m_selectedSpawner](m_spawner.get(), tile);
 			//m_gameMap->setTileAtIsoCoord( Input::GetMousePosition(), 3 );
 		}
 	}
@@ -107,6 +107,11 @@ void MapScreen::render()
 	al_set_target_bitmap(al_get_backbuffer(m_game->display()));
 
 	m_gameMap->render();
+
+	m_game->m_camera1->bind();
+	char buffer[10];
+	sprintf(buffer, "tool %d", m_selectedSpawner);
+	al_draw_text(m_game->m_font, al_map_rgb(32, 128, 32), 0, 0, 0, buffer );
 }
 
 void MapScreen::hide()

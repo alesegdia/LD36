@@ -34,6 +34,7 @@ private:
 	bool m_enableMouseTravel = true;
 	ToolSet m_callbackList;
 	Spawner::SharedPtr m_spawner;
+	int m_selectedSpawner;
 
 };
 
