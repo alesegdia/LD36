@@ -33,14 +33,18 @@ MapScreen::MapScreen( LD36* g )
 	m_gameMap.reset(new Scene(map, m_game->m_camera2));
 	m_spawner.reset(new Spawner(m_gameMap));
 
+	m_deleteCommand = std::make_shared<RemoveEntity>( m_gameMap );
+	m_pathfindCommand = std::make_shared<PathfindCommand>( m_gameMap );
+
 	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_spawner));
+	m_spawnerCommands.push_back(m_pathfindCommand);
+	m_spawnerCommands.push_back(m_deleteCommand);
+	m_spawnerCommands.push_back(std::make_shared<MoveEntityCommand>(m_gameMap));
 
-	m_deleteCommand = std::make_shared<RemoveEntity>( m_gameMap );
-	m_pathfindCommand = std::make_shared<PathfindCommand>( m_gameMap );
 }
 
 MapScreen::~MapScreen()
@@ -95,7 +99,7 @@ void MapScreen::render()
 
 	m_game->m_camera1->bind();
 	char buffer[10];
-	sprintf(buffer, "tool %d", m_selectedSpawner);
+	sprintf(buffer, "[%s]", m_spawnerCommands[m_selectedSpawner]->name().c_str());
 	al_draw_text(m_game->m_font, al_map_rgb(32, 128, 32), 0, 0, 0, buffer );
 }
 
@@ -122,9 +126,9 @@ void MapScreen::editorStep()
 		if( m_gameMap->isWalkableTile(tile) )
 		{
 			//m_spawnerCommands[m_selectedSpawner]->reset();
-			//tryEnqueueCommand(m_spawnerCommands[m_selectedSpawner]);
+			tryEnqueueCommand(m_spawnerCommands[m_selectedSpawner]);
 			//(*m_spawnerCommands[m_selectedSpawner])(tile);
-			tryEnqueueCommand(m_pathfindCommand);
+			//tryEnqueueCommand(m_pathfindCommand);
 		}
 
 	}
