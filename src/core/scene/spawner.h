@@ -15,6 +15,12 @@ public:
 
 	}
 
+	Entity::SharedPtr spawn( Entity::SharedPtr model, const Vec2i& tile_pos )
+	{
+		auto entity = Entity::Clone( model, Vec2f( tile_pos.x() * 16, tile_pos.y() * 16 ) );
+		return m_scene->addPlayerEntity(entity);
+	}
+
 	void spawnSlime( Vec2i tile_pos )
 	{
 		Entity::SharedPtr entity = makeEntityAtTile(Assets::instance->charactersSheet->getFrame(0, 0), tile_pos);

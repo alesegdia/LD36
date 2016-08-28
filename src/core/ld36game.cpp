@@ -84,3 +84,8 @@ void LD36::update(double delta)
 	Game::update(delta);
 }
 
+bool LD36::editor()
+{
+	return m_editor;
+}
+

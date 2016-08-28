@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stack>
+#include <queue>
+
 #include <allegro5/allegro5.h>
 
 #include <alligator/game/game.h>
@@ -10,6 +13,7 @@
 #include "../scene/scene.h"
 #include "../scene/renderer.h"
 #include "../scene/spawner.h"
+#include "../scene/commands.h"
 
 class LD36;
 
@@ -24,6 +28,9 @@ public:
 	void render() override ;
 	void hide() override ;
 
+	void editorStep();
+	void commandStep();
+
 private:
 
 	typedef std::function<void(Spawner*, const Vec2i&)> SpawnerTool;
@@ -34,6 +41,8 @@ private:
 	bool m_enableMouseTravel = true;
 	ToolSet m_callbackList;
 	Spawner::SharedPtr m_spawner;
+	std::queue<Command::SharedPtr> m_commandQueue;
+	std::vector<Command::SharedPtr> m_spawnerCommands;
 	int m_selectedSpawner;
 
 };

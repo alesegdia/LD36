@@ -12,6 +12,13 @@ public:
 
 	typedef std::shared_ptr<Entity> SharedPtr;
 
+	static Entity::SharedPtr Clone( Entity::SharedPtr model, Vec2f position )
+	{
+		Entity::SharedPtr clone(new Entity(model->m_sprite, position));
+		// ... copy other params ...
+		return clone;
+	}
+
 	Entity( ALLEGRO_BITMAP* sprite, Vec2f position = Vec2f(0, 0) )
 		: m_sprite(sprite),
 		  m_position(position)

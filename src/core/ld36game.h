@@ -15,7 +15,7 @@ class LD36 : public Game {
 
 public:
 
-	LD36 ( int sw, int sh, bool editor = false );
+	LD36 ( int sw, int sh, bool editor = true );
 	virtual ~LD36();
 
 	void create() override ;
@@ -32,6 +32,8 @@ public:
 	Camera::SharedPtr m_camera1;
 	Camera::SharedPtr m_camera2;
 	Camera::SharedPtr m_camera3;
+
+	bool editor();
 
 private:
 	bool m_editor;

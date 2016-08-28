@@ -39,6 +39,11 @@ MapScreen::MapScreen( LD36* g )
 	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnDemon( pos ); });
 	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnMagetoball( pos ); });
 
+	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_spawner));
 }
 
 MapScreen::~MapScreen()
@@ -78,26 +83,9 @@ void MapScreen::update(double delta)
 
 	m_game->m_camera2->move( dx, dy );
 
-	if( Input::IsKeyJustPressed(ALLEGRO_KEY_Q) )
+	if( m_game->editor() )
 	{
-		m_selectedSpawner = (m_selectedSpawner + 1) % m_callbackList.size();
-		printf("HEY!\n");
-		fflush(stdin);
-	}
-
-	if( Input::IsKeyJustPressed(ALLEGRO_KEY_E))
-	{
-		m_selectedSpawner = std::max(0, m_selectedSpawner - 1);
-	}
-
-	if( Input::IsMouseButtonPressed(1) )
-	{
-		Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
-		if( m_gameMap->isWalkableTile(tile) )
-		{
-			m_callbackList[m_selectedSpawner](m_spawner.get(), tile);
-			//m_gameMap->setTileAtIsoCoord( Input::GetMousePosition(), 3 );
-		}
+		editorStep();
 	}
 }
 
@@ -117,6 +105,51 @@ void MapScreen::render()
 void MapScreen::hide()
 {
 
+}
+
+void MapScreen::editorStep()
+{
+	if( Input::IsKeyJustPressed(ALLEGRO_KEY_Q) )
+	{
+		m_selectedSpawner = (m_selectedSpawner + 1) % m_spawnerCommands.size();
+	}
+
+	if( Input::IsKeyJustPressed(ALLEGRO_KEY_E))
+	{
+		m_selectedSpawner = std::max(0, m_selectedSpawner - 1);
+	}
+
+	if( Input::IsMouseButtonPressed(1) )
+	{
+		Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
+		if( m_gameMap->isWalkableTile(tile) )
+		{
+			m_commandStack.push(m_spawnerCommands[m_selectedSpawner]);
+		}
+
+		/*
+			Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
+			if( m_gameMap->isWalkableTile(tile) )
+			{
+				m_callbackList[m_selectedSpawner](m_spawner.get(), tile);
+				//m_gameMap->setTileAtIsoCoord( Input::GetMousePosition(), 3 );
+			}
+			*/
+	}
+
+	commandStep();
+}
+
+void MapScreen::commandStep()
+{
+	if( m_commandStack.size() > 0 )
+	{
+		(*m_commandStack.front())( m_gameMap->getTileAtIso(Input::GetMousePosition()) );
+		if( m_commandStack.front()->status() == Command::Status::Ready )
+		{
+			m_commandStack.pop();
+		}
+	}
 }
 
 

@@ -1,5 +1,12 @@
 #include "scene.h"
 
+Scene::~Scene()
+{
+	m_allEntities.clear();
+	m_playerEntities.clear();
+	m_enemyEntities.clear();
+}
+
 Scene::Scene(Tilemap::SharedPtr map, Camera::SharedPtr map_camera)
 	: m_map(map),
 	  m_mapCamera(map_camera)

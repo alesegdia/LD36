@@ -19,12 +19,7 @@ public:
 	typedef std::vector<Entity::SharedPtr> EntityList;
 	typedef Matrix2D<Entity::SharedPtr> EntityMatrix;
 
-	~Scene()
-	{
-		m_allEntities.clear();
-		m_playerEntities.clear();
-		m_enemyEntities.clear();
-	}
+	~Scene();
 
 	Scene( Tilemap::SharedPtr map, Camera::SharedPtr map_camera );
 
