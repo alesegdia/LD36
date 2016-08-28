@@ -6,8 +6,9 @@
 class EntitySpawnerCommand : public Command
 {
 public:
-	EntitySpawnerCommand( Spawner::SharedPtr spawner, Entity::SharedPtr model_entity, std::string name = "" )
+	EntitySpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner, Entity::SharedPtr model_entity, std::string name = "" )
 		: Command(name),
+		  m_scene(scene),
 		  m_spawner(spawner),
 		  m_modelEntity(model_entity)
 	{
@@ -16,7 +17,10 @@ public:
 
 	void delegate( const Vec2i& tile ) override
 	{
-		m_spawner->spawn(m_modelEntity, tile);
+		if( m_scene->isWalkableTile( tile ) )
+		{
+			m_spawner->spawn(m_modelEntity, tile);
+		}
 		status( Status::Ready );
 	}
 
@@ -26,6 +30,7 @@ public:
 	}
 
 private:
+	Scene::SharedPtr m_scene;
 	Spawner::SharedPtr m_spawner;
 	Entity::SharedPtr m_modelEntity;
 
@@ -35,35 +40,35 @@ private:
 class SlimeSpawnerCommand : public EntitySpawnerCommand
 {
 public:
-	SlimeSpawnerCommand( Spawner::SharedPtr spawner ) :
-		EntitySpawnerCommand( spawner, MakeEntity(Assets::instance->charactersSheet->getFrame(0, 0)), "SlimeSpawner" ) {}
+	SlimeSpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner ) :
+		EntitySpawnerCommand( scene, spawner, MakeEntity(Assets::instance->charactersSheet->getFrame(0, 0)), "SlimeSpawner" ) {}
 };
 
 class SnakeSpawnerCommand : public EntitySpawnerCommand
 {
 public:
-	SnakeSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
+	SnakeSpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner ) : EntitySpawnerCommand( scene, spawner,
 		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 0)), "SnakeSpawner" ) {}
 };
 
 class GodSpawnerCommand : public EntitySpawnerCommand
 {
 public:
-	GodSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
+	GodSpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner ) : EntitySpawnerCommand( scene, spawner,
 		MakeEntity(Assets::instance->charactersSheet->getFrame(2, 0)), "GodSpawner" ) {}
 };
 
 class DemonSpawnerCommand : public EntitySpawnerCommand
 {
 public:
-	DemonSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
+	DemonSpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner ) : EntitySpawnerCommand( scene, spawner,
 		MakeEntity(Assets::instance->charactersSheet->getFrame(0, 1)), "DemonSpawner" ) {}
 };
 
 class MagnetoballSpawnerCommand : public EntitySpawnerCommand
 {
 public:
-	MagnetoballSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
+	MagnetoballSpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner ) : EntitySpawnerCommand( scene, spawner,
 		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 1)), "MagnetoballSpawner" ) {}
 };
 

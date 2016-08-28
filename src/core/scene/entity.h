@@ -23,7 +23,6 @@ public:
 		: m_sprite(sprite),
 		  m_position(position)
 	{
-		std::cout << "Done at " << m_position.x() << ", " << m_position.y() << std::endl;
 		computeTile();
 	}
 

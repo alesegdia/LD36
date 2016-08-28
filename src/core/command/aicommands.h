@@ -82,24 +82,18 @@ public:
 				if( m_selectedUnit != nullptr )
 				{
 					m_status++;
-					std::cout << "selected tile" << std::endl;
 				}
 			}
 			status( Command::Status::Running );
 			break;
 		case 1: // select place to move and perform search
-			if( Input::IsMouseButtonJustPressed(1) )
+			if( Input::IsMouseButtonJustPressed(1) && m_scene->isWalkableTile(tile) )
 			{
 				if( m_scene->isWalkableTile(tile) )
 				{
 					m_targetTile = tile;
 					m_path = find_path( m_scene, m_selectedUnit->tile(), m_targetTile );
 					m_status++;
-					std::cout << "ok target!" << std::endl;
-				}
-				else
-				{
-					std::cout << "no target..." << std::endl;
 				}
 			}
 			status( Command::Status::Running );

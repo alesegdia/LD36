@@ -36,11 +36,11 @@ MapScreen::MapScreen( LD36* g )
 	m_deleteCommand = std::make_shared<RemoveEntity>( m_gameMap );
 	m_pathfindCommand = std::make_shared<PathfindCommand>( m_gameMap );
 
-	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_gameMap, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_gameMap, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_gameMap, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_gameMap, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_gameMap, m_spawner));
 	m_spawnerCommands.push_back(m_pathfindCommand);
 	m_spawnerCommands.push_back(m_deleteCommand);
 	m_spawnerCommands.push_back(std::make_shared<MoveEntityCommand>(m_gameMap));
@@ -120,22 +120,13 @@ void MapScreen::editorStep()
 		m_selectedSpawner = std::max(0, m_selectedSpawner - 1);
 	}
 
-	if( Input::IsMouseButtonPressed(1) )
+	if( Input::IsMouseButtonJustPressed(1) )
 	{
-		Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
-		if( m_gameMap->isWalkableTile(tile) )
-		{
-			//m_spawnerCommands[m_selectedSpawner]->reset();
-			tryEnqueueCommand(m_spawnerCommands[m_selectedSpawner]);
-			//(*m_spawnerCommands[m_selectedSpawner])(tile);
-			//tryEnqueueCommand(m_pathfindCommand);
-		}
-
+		tryEnqueueCommand(m_spawnerCommands[m_selectedSpawner]);
 	}
 
 	if( Input::IsMouseButtonPressed(2) )
 	{
-		//m_deleteCommand->reset();
 		tryEnqueueCommand(m_deleteCommand);
 	}
 
