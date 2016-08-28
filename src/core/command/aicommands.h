@@ -71,53 +71,65 @@ public:
 
 	}
 
-	void delegate(const Vec2i &tile)
+	void delegate(const Vec2i &tile) override
 	{
-		if( Input::IsMouseButtonJustPressed(1) )
+		switch( m_status )
 		{
-			switch( m_status )
+		case 0: // select unit to move
+			if( Input::IsMouseButtonJustPressed(1) )
 			{
-			case 0: // select unit to move
 				m_selectedUnit = m_scene->getEntityAt( tile );
 				if( m_selectedUnit != nullptr )
 				{
 					m_status++;
+					std::cout << "selected tile" << std::endl;
 				}
-				status( Command::Status::Running );
-				break;
-			case 1: // select place to move and perform search
+			}
+			status( Command::Status::Running );
+			break;
+		case 1: // select place to move and perform search
+			if( Input::IsMouseButtonJustPressed(1) )
+			{
 				if( m_scene->isWalkableTile(tile) )
 				{
 					m_targetTile = tile;
 					m_path = find_path( m_scene, m_selectedUnit->tile(), m_targetTile );
 					m_status++;
-				}
-				status( Command::Status::Running );
-				break;
-			case 2: // move between nodes until reach
-				if( m_currentNode < m_path.size() - 1 )
-				{
-					if( m_transitioning == 1.f )
-					{
-						m_transitioning = 0;
-						m_fromTile = m_path[m_currentNode];
-						m_toTile = m_path[m_currentNode + 1];
-					}
-					else
-					{
-						m_transitioning += 0.1f;
-						auto pos = lerp(m_fromTile, m_toTile, m_transitioning);
-						pos.set( pos.x() * 16, pos.y() * 16 );
-						m_selectedUnit->setPosition(Vec2f(pos.x(), pos.y()));
-					}
-					status( Command::Status::Running );
+					std::cout << "ok target!" << std::endl;
 				}
 				else
 				{
-					status( Command::Status::Ready );
+					std::cout << "no target..." << std::endl;
 				}
-				break;
 			}
+			status( Command::Status::Running );
+			break;
+		case 2: // move between nodes until reach
+			if( m_currentNode < m_path.size() - 1 )
+			{
+				if( m_transitioning >= 1.f )
+				{
+					m_transitioning = 0;
+					m_fromTile = Vec2f( m_path[m_currentNode].x(), m_path[m_currentNode].y() );
+					m_toTile = Vec2f( m_path[m_currentNode+1].x(), m_path[m_currentNode+1].y() );
+					m_currentNode++;
+				}
+				else
+				{
+					m_transitioning += 0.1f;
+					auto pos = lerp(m_fromTile, m_toTile, m_transitioning);
+					pos.set( pos.x() * 16, pos.y() * 16 );
+					m_selectedUnit->setPosition(Vec2f(pos.x(), pos.y()));
+				}
+				status( Command::Status::Running );
+			}
+			else
+			{
+				m_scene->repositionUnit( m_selectedUnit, Vec2f(m_toTile.x() * 16, m_toTile.y() * 16) );
+				status( Command::Status::Ready );
+				m_status++;
+			}
+			break;
 		}
 	}
 
@@ -126,6 +138,8 @@ public:
 		m_status = 0;
 		m_selectedUnit = nullptr;
 		m_currentNode = 0;
+		m_path.clear();
+		m_transitioning = 1.f;
 		Command::reset();
 	}
 
@@ -135,8 +149,8 @@ private:
 	Entity::SharedPtr m_selectedUnit;
 	Vec2i m_targetTile;
 	std::vector<Vec2i> m_path;
-	Vec2i m_fromTile;
-	Vec2i m_toTile;
+	Vec2f m_fromTile;
+	Vec2f m_toTile;
 
 	size_t m_currentNode = 0;
 	float m_transitioning = 0;
