@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 
 #include <alligator/util/math.h>
 
@@ -15,6 +16,12 @@ public:
 		Running,
 		Ready
 	};
+
+	Command( std::string name = "" )
+		: m_name(name)
+	{
+
+	}
 
 	virtual ~Command();
 
@@ -36,6 +43,11 @@ public:
 		m_status = Status::Running;
 	}
 
+	const std::string& name()
+	{
+		return m_name;
+	}
+
 protected:
 	void status( Status new_status )
 	{
@@ -44,5 +56,6 @@ protected:
 
 private:
 	Status m_status = Status::Running;
+	std::string m_name = "";
 
 };

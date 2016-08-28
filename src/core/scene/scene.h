@@ -48,6 +48,15 @@ public:
 		}
 	}
 
+	Entity::SharedPtr getEntityAt( const Vec2i& tile )
+	{
+		if( fitsTilemap( tile ) )
+		{
+			return m_entityMatrix->get( tile.x(), tile.y() );
+		}
+		return nullptr;
+	}
+
 private:
 
 	bool fitsTilemap( const Vec2i& tile )

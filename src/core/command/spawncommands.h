@@ -6,8 +6,9 @@
 class EntitySpawnerCommand : public Command
 {
 public:
-	EntitySpawnerCommand( Spawner::SharedPtr spawner, Entity::SharedPtr model_entity )
-		: m_spawner(spawner),
+	EntitySpawnerCommand( Spawner::SharedPtr spawner, Entity::SharedPtr model_entity, std::string name = "" )
+		: Command(name),
+		  m_spawner(spawner),
 		  m_modelEntity(model_entity)
 	{
 
@@ -34,36 +35,36 @@ private:
 class SlimeSpawnerCommand : public EntitySpawnerCommand
 {
 public:
-	SlimeSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
-		MakeEntity(Assets::instance->charactersSheet->getFrame(0, 0)) ) {}
+	SlimeSpawnerCommand( Spawner::SharedPtr spawner ) :
+		EntitySpawnerCommand( spawner, MakeEntity(Assets::instance->charactersSheet->getFrame(0, 0)), "SlimeSpawner" ) {}
 };
 
 class SnakeSpawnerCommand : public EntitySpawnerCommand
 {
 public:
 	SnakeSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
-		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 0)) ) {}
+		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 0)), "SnakeSpawner" ) {}
 };
 
 class GodSpawnerCommand : public EntitySpawnerCommand
 {
 public:
 	GodSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
-		MakeEntity(Assets::instance->charactersSheet->getFrame(2, 0)) ) {}
+		MakeEntity(Assets::instance->charactersSheet->getFrame(2, 0)), "GodSpawner" ) {}
 };
 
 class DemonSpawnerCommand : public EntitySpawnerCommand
 {
 public:
 	DemonSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
-		MakeEntity(Assets::instance->charactersSheet->getFrame(0, 1)) ) {}
+		MakeEntity(Assets::instance->charactersSheet->getFrame(0, 1)), "DemonSpawner" ) {}
 };
 
 class MagnetoballSpawnerCommand : public EntitySpawnerCommand
 {
 public:
 	MagnetoballSpawnerCommand( Spawner::SharedPtr spawner ) : EntitySpawnerCommand( spawner,
-		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 1)) ) {}
+		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 1)), "MagnetoballSpawner" ) {}
 };
 
 class RemoveEntity : public Command

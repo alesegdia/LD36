@@ -53,6 +53,11 @@ public:
 		return m_position;
 	}
 
+	void setPosition( const Vec2f& pos )
+	{
+		m_position = pos;
+	}
+
 private:
 	ALLEGRO_BITMAP* m_sprite;
 	Vec2f m_position;
