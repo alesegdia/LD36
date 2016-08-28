@@ -11,7 +11,6 @@ std::vector<Vec2i> find_path(Scene::SharedPtr scene, Vec2i start_tile, Vec2i end
 	start_node->computeF();
 	astar.restartSearch(start_node, target_node);
 	while( AStarSearchStatus::Running == astar.step() );
-	astar.computeSolution();
 	std::vector<Vec2i> nodes;
 	for( auto n : astar.solution() )
 	{
