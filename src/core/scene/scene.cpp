@@ -102,6 +102,37 @@ void Scene::removeEntityFromList(Entity::SharedPtr entity, Scene::EntityList &li
 	list.erase(std::remove(list.begin(), list.end(), entity));
 }
 
+void Scene::drawPath(const std::vector<Vec2i> &nodes)
+{
+	for( auto n : nodes )
+	{
+		m_map->set(n.x(), n.y(), 3);
+	}
+}
+
+Entity::SharedPtr Scene::getEntityAt(const Vec2i &tile)
+{
+	if( fitsTilemap( tile ) )
+	{
+		return m_entityMatrix->get( tile.x(), tile.y() );
+	}
+	return nullptr;
+}
+
+void Scene::repositionUnit(Entity::SharedPtr entity, const Vec2f &new_pos)
+{
+	entity->setPosition(new_pos);
+	m_entityMatrix->set( entity->tile().x(), entity->tile().y(), nullptr );
+	entity->computeTile();
+	m_entityMatrix->set( entity->tile().x(), entity->tile().y(), entity );
+}
+
+bool Scene::fitsTilemap(const Vec2i &tile)
+{
+	return	tile.x() >= 0 && tile.x() < m_entityMatrix->cols() &&
+			tile.y() >= 0 && tile.y() < m_entityMatrix->rows();
+}
+
 bool Scene::CompareEntityRenderOrder(Entity::SharedPtr e1, Entity::SharedPtr e2)
 {
 	return e1->renderOrder() < e2->renderOrder();

@@ -40,30 +40,15 @@ public:
 
 	void removeEntityFromList( Entity::SharedPtr entity, EntityList& list );
 
-	void drawPath( const std::vector<Vec2i>& nodes )
-	{
-		for( auto n : nodes )
-		{
-			m_map->set(n.x(), n.y(), 3);
-		}
-	}
+	void drawPath( const std::vector<Vec2i>& nodes );
 
-	Entity::SharedPtr getEntityAt( const Vec2i& tile )
-	{
-		if( fitsTilemap( tile ) )
-		{
-			return m_entityMatrix->get( tile.x(), tile.y() );
-		}
-		return nullptr;
-	}
+	Entity::SharedPtr getEntityAt( const Vec2i& tile );
+
+	void repositionUnit( Entity::SharedPtr entity, const Vec2f& new_pos );
 
 private:
 
-	bool fitsTilemap( const Vec2i& tile )
-	{
-		return	tile.x() >= 0 && tile.x() < m_entityMatrix->cols() &&
-				tile.y() >= 0 && tile.y() < m_entityMatrix->rows();
-	}
+	bool fitsTilemap( const Vec2i& tile );
 
 	static bool CompareEntityRenderOrder( Entity::SharedPtr e1, Entity::SharedPtr e2 );
 
