@@ -13,7 +13,7 @@
 #include "../scene/scene.h"
 #include "../scene/renderer.h"
 #include "../scene/spawner.h"
-#include "../scene/commands.h"
+#include "../command/commands.h"
 
 class LD36;
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "command.h"
-#include "spawner.h"
+#include "../scene/spawner.h"
 
 class EntitySpawnerCommand : public Command
 {

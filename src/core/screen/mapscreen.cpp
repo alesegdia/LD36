@@ -124,7 +124,7 @@ void MapScreen::editorStep()
 		Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
 		if( m_gameMap->isWalkableTile(tile) )
 		{
-			m_commandStack.push(m_spawnerCommands[m_selectedSpawner]);
+			m_commandQueue.push(m_spawnerCommands[m_selectedSpawner]);
 		}
 
 		/*
@@ -142,12 +142,12 @@ void MapScreen::editorStep()
 
 void MapScreen::commandStep()
 {
-	if( m_commandStack.size() > 0 )
+	if( m_commandQueue.size() > 0 )
 	{
-		(*m_commandStack.front())( m_gameMap->getTileAtIso(Input::GetMousePosition()) );
-		if( m_commandStack.front()->status() == Command::Status::Ready )
+		(*m_commandQueue.front())( m_gameMap->getTileAtIso(Input::GetMousePosition()) );
+		if( m_commandQueue.front()->status() == Command::Status::Ready )
 		{
-			m_commandStack.pop();
+			m_commandQueue.pop();
 		}
 	}
 }
