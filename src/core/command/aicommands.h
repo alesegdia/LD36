@@ -11,7 +11,8 @@ class PathfindCommand : public Command
 {
 public:
 	PathfindCommand(Scene::SharedPtr scene)
-		: m_scene(scene),
+		: Command("PathFind"),
+		  m_scene(scene),
 		  m_status(0)
 	{
 
@@ -64,7 +65,8 @@ class MoveEntityCommand : public Command
 {
 public:
 	MoveEntityCommand( Scene::SharedPtr scene )
-		: m_scene(scene)
+		: Command("MoveEntity"),
+		  m_scene(scene)
 	{
 
 	}

@@ -71,7 +71,8 @@ class RemoveEntity : public Command
 {
 public:
 	RemoveEntity( Scene::SharedPtr scene )
-		: m_scene(scene)
+		: Command("RemoveEntity"),
+		  m_scene(scene)
 	{
 
 	}
