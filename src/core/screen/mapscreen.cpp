@@ -33,12 +33,6 @@ MapScreen::MapScreen( LD36* g )
 	m_gameMap.reset(new Scene(map, m_game->m_camera2));
 	m_spawner.reset(new Spawner(m_gameMap));
 
-	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnSlime( pos ); });
-	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnSnake( pos ); });
-	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnGod( pos ); });
-	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnDemon( pos ); });
-	m_callbackList.push_back([](Spawner* spawner, const Vec2i& pos){ spawner->spawnMagetoball( pos ); });
-
 	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_spawner));

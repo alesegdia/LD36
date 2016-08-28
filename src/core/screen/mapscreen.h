@@ -33,13 +33,9 @@ public:
 
 private:
 
-	typedef std::function<void(Spawner*, const Vec2i&)> SpawnerTool;
-	typedef std::vector<SpawnerTool> ToolSet;
-
 	LD36* m_game;
 	Scene::SharedPtr m_gameMap;
 	bool m_enableMouseTravel = true;
-	ToolSet m_callbackList;
 	Spawner::SharedPtr m_spawner;
 	std::queue<Command::SharedPtr> m_commandQueue;
 	std::vector<Command::SharedPtr> m_spawnerCommands;
