@@ -32,10 +32,21 @@ public:
 
 	void render();
 	Vec2i getTileAtIso( const Vec2i& iso_coord );
-
 	bool isWalkableTile(const Vec2i &tile );
 
+	void removeEntityAtOrthoTile( const Vec2i& ortho );
+
+	void removePlayerEntity( Entity::SharedPtr to_remove );
+
+	void removeEntityFromList( Entity::SharedPtr entity, EntityList& list );
+
 private:
+
+	bool fitsTilemap( const Vec2i& tile )
+	{
+		return	tile.x() >= 0 && tile.x() < m_entityMatrix->cols() &&
+				tile.y() >= 0 && tile.y() < m_entityMatrix->rows();
+	}
 
 	static bool CompareEntityRenderOrder( Entity::SharedPtr e1, Entity::SharedPtr e2 );
 

@@ -38,6 +38,8 @@ MapScreen::MapScreen( LD36* g )
 	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_spawner));
 	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_spawner));
+
+	m_deleteCommand = std::make_shared<RemoveEntity>( m_gameMap );
 }
 
 MapScreen::~MapScreen()
@@ -103,6 +105,7 @@ void MapScreen::hide()
 
 void MapScreen::editorStep()
 {
+
 	if( Input::IsKeyJustPressed(ALLEGRO_KEY_Q) )
 	{
 		m_selectedSpawner = (m_selectedSpawner + 1) % m_spawnerCommands.size();
@@ -118,17 +121,17 @@ void MapScreen::editorStep()
 		Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
 		if( m_gameMap->isWalkableTile(tile) )
 		{
-			m_commandQueue.push(m_spawnerCommands[m_selectedSpawner]);
+			m_spawnerCommands[m_selectedSpawner]->reset();
+			tryEnqueueCommand(m_spawnerCommands[m_selectedSpawner]);
+			//(*m_spawnerCommands[m_selectedSpawner])(tile);
 		}
 
-		/*
-			Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
-			if( m_gameMap->isWalkableTile(tile) )
-			{
-				m_callbackList[m_selectedSpawner](m_spawner.get(), tile);
-				//m_gameMap->setTileAtIsoCoord( Input::GetMousePosition(), 3 );
-			}
-			*/
+	}
+
+	if( Input::IsMouseButtonPressed(2) )
+	{
+		m_deleteCommand->reset();
+		tryEnqueueCommand(m_deleteCommand);
 	}
 
 	commandStep();
@@ -136,13 +139,26 @@ void MapScreen::editorStep()
 
 void MapScreen::commandStep()
 {
-	if( m_commandQueue.size() > 0 )
+	if( m_runningCommand != nullptr )
 	{
-		(*m_commandQueue.front())( m_gameMap->getTileAtIso(Input::GetMousePosition()) );
-		if( m_commandQueue.front()->status() == Command::Status::Ready )
+		if( m_runningCommand->status() != Command::Status::Ready )
 		{
-			m_commandQueue.pop();
+			Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
+			(*m_runningCommand)(tile);
 		}
+
+		if( m_runningCommand->status() == Command::Status::Ready )
+		{
+			m_runningCommand = nullptr;
+		}
+	}
+}
+
+void MapScreen::tryEnqueueCommand(Command::SharedPtr cmd)
+{
+	if( m_runningCommand == nullptr || m_runningCommand->status() == Command::Status::Ready )
+	{
+		m_runningCommand = cmd;
 	}
 }
 

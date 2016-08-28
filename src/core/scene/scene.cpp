@@ -75,9 +75,31 @@ Vec2i Scene::getTileAtIso(const Vec2i& iso_coord)
 
 bool Scene::isWalkableTile(const Vec2i& tile)
 {
-	return	tile.x() >= 0 && tile.x() < m_entityMatrix->cols() &&
-			tile.y() >= 0 && tile.y() < m_entityMatrix->rows() &&
-			m_entityMatrix->get(tile.x(), tile.y()) == nullptr;
+	return	fitsTilemap(tile) && m_entityMatrix->get(tile.x(), tile.y()) == nullptr;
+}
+
+void Scene::removeEntityAtOrthoTile(const Vec2i &ortho)
+{
+	if( fitsTilemap(ortho) )
+	{
+		Entity::SharedPtr to_remove = m_entityMatrix->get(ortho.x(), ortho.y());
+		if( to_remove != nullptr )
+		{
+			removePlayerEntity( to_remove );
+		}
+	}
+}
+
+void Scene::removePlayerEntity(Entity::SharedPtr to_remove)
+{
+	m_entityMatrix->set(to_remove->tile().x(), to_remove->tile().y(), nullptr);
+	removeEntityFromList(to_remove, m_playerEntities);
+	removeEntityFromList(to_remove, m_allEntities);
+}
+
+void Scene::removeEntityFromList(Entity::SharedPtr entity, Scene::EntityList &list)
+{
+	list.erase(std::remove(list.begin(), list.end(), entity));
 }
 
 bool Scene::CompareEntityRenderOrder(Entity::SharedPtr e1, Entity::SharedPtr e2)

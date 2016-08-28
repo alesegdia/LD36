@@ -66,3 +66,22 @@ public:
 		MakeEntity(Assets::instance->charactersSheet->getFrame(1, 1)) ) {}
 };
 
+class RemoveEntity : public Command
+{
+public:
+	RemoveEntity( Scene::SharedPtr scene )
+		: m_scene(scene)
+	{
+
+	}
+
+	void delegate(const Vec2i &tile)
+	{
+		m_scene->removeEntityAtOrthoTile(tile);
+		status( Status::Ready );
+	}
+
+private:
+	Scene::SharedPtr m_scene;
+
+};

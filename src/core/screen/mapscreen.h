@@ -30,6 +30,7 @@ public:
 
 	void editorStep();
 	void commandStep();
+	void tryEnqueueCommand( Command::SharedPtr cmd );
 
 private:
 
@@ -37,9 +38,10 @@ private:
 	Scene::SharedPtr m_gameMap;
 	bool m_enableMouseTravel = true;
 	Spawner::SharedPtr m_spawner;
-	std::queue<Command::SharedPtr> m_commandQueue;
+	Command::SharedPtr m_runningCommand;
 	std::vector<Command::SharedPtr> m_spawnerCommands;
 	int m_selectedSpawner;
+	Command::SharedPtr m_deleteCommand;
 
 };
 
