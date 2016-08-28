@@ -14,6 +14,7 @@
 #include "../scene/renderer.h"
 #include "../scene/spawner.h"
 #include "../command/spawncommands.h"
+#include "../command/aicommands.h"
 
 class LD36;
 
@@ -42,6 +43,7 @@ private:
 	std::vector<Command::SharedPtr> m_spawnerCommands;
 	int m_selectedSpawner;
 	Command::SharedPtr m_deleteCommand;
+	Command::SharedPtr m_pathfindCommand;
 
 };
 

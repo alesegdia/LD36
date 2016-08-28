@@ -12,7 +12,6 @@ public:
 
 	enum class Status : uint8_t
 	{
-		Uninitialised,
 		Running,
 		Ready
 	};
@@ -32,9 +31,9 @@ public:
 
 	virtual void delegate(const Vec2i& tile) = 0 ;
 
-	void reset()
+	virtual void reset()
 	{
-		m_status = Status::Uninitialised;
+		m_status = Status::Running;
 	}
 
 protected:
@@ -44,6 +43,6 @@ protected:
 	}
 
 private:
-	Status m_status = Status::Uninitialised;
+	Status m_status = Status::Running;
 
 };

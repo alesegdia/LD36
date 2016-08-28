@@ -40,6 +40,14 @@ public:
 
 	void removeEntityFromList( Entity::SharedPtr entity, EntityList& list );
 
+	void drawPath( const std::vector<Vec2i>& nodes )
+	{
+		for( auto n : nodes )
+		{
+			m_map->set(n.x(), n.y(), 3);
+		}
+	}
+
 private:
 
 	bool fitsTilemap( const Vec2i& tile )

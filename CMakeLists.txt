@@ -27,6 +27,7 @@ endif()
 # add a new target with allegro, alligator and core sources. uses monolith for win32
 function(add_alleg_target EXEC-NAME SRCS)
 	add_executable(${EXEC-NAME} ${CORE_SOURCES} ${ASTAR_SOURCES} ${SRCS})
+	include_directories(${EXEC-NAME} module/astarcpp/src)
 	target_link_libraries(${EXEC-NAME} alligator)
 	if(WIN32)
 		target_link_libraries(${EXEC-NAME} allegro_monolith)
