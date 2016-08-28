@@ -5,6 +5,8 @@ project(LD36)
 add_subdirectory(module/alligator/)
 include_directories(module/alligator/src)
 
+add_subdirectory(module/astarcpp)
+
 # common flags
 list(APPEND CMAKE_CXX_FLAGS "-std=c++11 -g -ftest-coverage -fprofile-arcs")
 
@@ -24,7 +26,7 @@ endif()
 
 # add a new target with allegro, alligator and core sources. uses monolith for win32
 function(add_alleg_target EXEC-NAME SRCS)
-	add_executable(${EXEC-NAME} ${CORE_SOURCES} ${SRCS})
+	add_executable(${EXEC-NAME} ${CORE_SOURCES} ${ASTAR_SOURCES} ${SRCS})
 	target_link_libraries(${EXEC-NAME} alligator)
 	if(WIN32)
 		target_link_libraries(${EXEC-NAME} allegro_monolith)
