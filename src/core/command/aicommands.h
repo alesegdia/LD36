@@ -107,22 +107,23 @@ public:
 					if( m_transitioning >= 1.f )
 					{
 						m_transitioning = 0;
-						m_fromTile = Vec2f( m_path[m_currentNode].x(), m_path[m_currentNode].y() );
+						m_fromTile = m_selectedUnit->position();
 						m_toTile = Vec2f( m_path[m_currentNode+1].x(), m_path[m_currentNode+1].y() );
+						m_toTile *= 16;
 						m_currentNode++;
 					}
 					else
 					{
 						m_transitioning += 0.1f;
 						auto pos = lerp(m_fromTile, m_toTile, m_transitioning);
-						pos.set( pos.x() * 16, pos.y() * 16 );
+						pos.set( pos.x(), pos.y() );
 						m_selectedUnit->setPosition(Vec2f(pos.x(), pos.y()));
 					}
 					status( Command::Status::Running );
 				}
 				else
 				{
-					m_scene->repositionUnit( m_selectedUnit, Vec2f(m_toTile.x() * 16, m_toTile.y() * 16) );
+					m_scene->repositionUnit( m_selectedUnit, Vec2f(m_targetTile.x() * 16, m_targetTile.y() * 16) );
 					status( Command::Status::Ready );
 					m_status++;
 				}
