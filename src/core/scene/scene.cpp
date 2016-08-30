@@ -8,33 +8,22 @@ Scene::~Scene()
 }
 
 Scene::Scene(Tilemap::SharedPtr map, Camera::SharedPtr map_camera)
-	: m_map(map),
+	: m_floorMap(map),
 	  m_mapCamera(map_camera)
 {
-	m_entityMatrix.reset(new EntityMatrix(m_map->cols(), m_map->rows(), nullptr));
-	m_mapRenderer.reset(new IsometricTileMapRenderer(map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
+	m_entityMatrix.reset(new EntityMatrix(m_floorMap->cols(), m_floorMap->rows(), nullptr));
+	m_floorMapRenderer.reset(new IsometricTileMapRenderer(map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
 
 }
 
-Entity::SharedPtr Scene::addPlayerEntity(Entity::SharedPtr entity)
+Entity::SharedPtr Scene::addEntity(Entity::SharedPtr entity, EntityType entity_type)
 {
-	m_playerEntities.push_back(entity);
-	m_allEntities.push_back(entity);
-	m_entityMatrix->set( entity->tile().x(), entity->tile().y(), entity );
-	return entity;
-}
-
-Entity::SharedPtr Scene::addEnemyEntity(Entity::SharedPtr entity)
-{
-	m_enemyEntities.push_back(entity);
-	m_allEntities.push_back(entity);
-	m_entityMatrix->set( entity->tile().x(), entity->tile().y(), entity );
-	return entity;
-}
-
-Entity::SharedPtr Scene::addWallEntity(Entity::SharedPtr entity)
-{
-	m_wallEntities.push_back(entity);
+	switch( entity_type )
+	{
+	case EntityType::Player: m_playerEntities.push_back(entity); break;
+	case EntityType::Enemy: m_enemyEntities.push_back(entity); break;
+	case EntityType::Wall: m_wallEntities.push_back(entity); break;
+	}
 	m_allEntities.push_back(entity);
 	m_entityMatrix->set( entity->tile().x(), entity->tile().y(), entity );
 	return entity;
@@ -42,10 +31,10 @@ Entity::SharedPtr Scene::addWallEntity(Entity::SharedPtr entity)
 
 void Scene::setGroundTile(Vec2i tile, int value)
 {
-	if( tile.x() >= 0 && tile.x() < m_map->cols() &&
-			tile.y() >= 0 && tile.y() < m_map->rows() )
+	if( tile.x() >= 0 && tile.x() < m_floorMap->cols() &&
+			tile.y() >= 0 && tile.y() < m_floorMap->rows() )
 	{
-		m_map->set( tile.x(), tile.y(), value );
+		m_floorMap->set( tile.x(), tile.y(), value );
 	}
 }
 
@@ -58,7 +47,7 @@ void Scene::setTileAtIsoCoord(Vec2i iso_coord, int value)
 void Scene::render()
 {
 	m_mapCamera->bind();
-	m_mapRenderer->render();
+	m_floorMapRenderer->render();
 
 	std::stable_sort(m_allEntities.begin(), m_allEntities.end(), &CompareEntityRenderOrder);
 
@@ -106,7 +95,7 @@ void Scene::drawPath(const std::vector<Vec2i> &nodes)
 {
 	for( auto n : nodes )
 	{
-		m_map->set(n.x(), n.y(), 3);
+		m_floorMap->set(n.x(), n.y(), 3);
 	}
 }
 

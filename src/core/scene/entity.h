@@ -6,6 +6,12 @@
 
 #include "isometrictranslator.h"
 
+enum class EntityType
+{
+	Player, Enemy, Wall
+};
+
+
 class Entity
 {
 public:

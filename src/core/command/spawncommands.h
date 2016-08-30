@@ -6,11 +6,14 @@
 class EntitySpawnerCommand : public Command
 {
 public:
-	EntitySpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner, Entity::SharedPtr model_entity, std::string name = "" )
+
+
+	EntitySpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner, Entity::SharedPtr model_entity, std::string name = "", EntityType et = EntityType::Player )
 		: Command(name),
 		  m_scene(scene),
 		  m_spawner(spawner),
-		  m_modelEntity(model_entity)
+		  m_modelEntity(model_entity),
+		  m_entityType(et)
 	{
 
 	}
@@ -19,7 +22,7 @@ public:
 	{
 		if( m_scene->isWalkableTile( tile ) )
 		{
-			m_spawner->spawn(m_modelEntity, tile);
+			m_spawner->spawn(m_modelEntity, tile, m_entityType);
 		}
 		status( Status::Ready );
 	}
@@ -33,6 +36,7 @@ private:
 	Scene::SharedPtr m_scene;
 	Spawner::SharedPtr m_spawner;
 	Entity::SharedPtr m_modelEntity;
+	EntityType m_entityType;
 
 };
 
@@ -91,4 +95,11 @@ public:
 private:
 	Scene::SharedPtr m_scene;
 
+};
+
+class WallSpawnerCommand : public EntitySpawnerCommand
+{
+public:
+	WallSpawnerCommand( Scene::SharedPtr scene, Spawner::SharedPtr spawner ) :
+		EntitySpawnerCommand( scene, spawner, MakeEntity(Assets::instance->objectsSheet->getFrame(0, 1)), "WallSpawner", EntityType::Wall) {}
 };

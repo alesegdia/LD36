@@ -23,10 +23,7 @@ public:
 
 	Scene( Tilemap::SharedPtr map, Camera::SharedPtr map_camera );
 
-	Entity::SharedPtr addPlayerEntity( Entity::SharedPtr entity );
-	Entity::SharedPtr addEnemyEntity( Entity::SharedPtr entity );
-	Entity::SharedPtr addWallEntity( Entity::SharedPtr entity );
-
+	Entity::SharedPtr addEntity( Entity::SharedPtr entity, EntityType entity_type );
 	void setGroundTile( Vec2i tile, int value );
 	void setTileAtIsoCoord( Vec2i iso_coord, int value );
 
@@ -59,9 +56,14 @@ private:
 	// for rendering
 	EntityList m_allEntities;
 
-	Tilemap::SharedPtr m_map;
 	EntityMatrix::SharedPtr m_entityMatrix;
-	IsometricTileMapRenderer::SharedPtr m_mapRenderer;
+
+	Tilemap::SharedPtr m_floorMap;
+	IsometricTileMapRenderer::SharedPtr m_floorMapRenderer;
+
+	Tilemap::SharedPtr m_overlayMap;
+	IsometricTileMapRenderer::SharedPtr m_overlayMapRenderer;
+
 	Camera::SharedPtr m_mapCamera;
 
 };

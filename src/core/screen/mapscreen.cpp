@@ -30,20 +30,21 @@ MapScreen::MapScreen( LD36* g )
 								  0,1,1,1,3,3,1,1,1,0,
 								  0,0,0,0,0,0,0,0,0,0,
 							  }));
-	m_gameMap.reset(new Scene(map, m_game->m_camera2));
-	m_spawner.reset(new Spawner(m_gameMap));
+	m_scene.reset(new Scene(map, m_game->m_camera2));
+	m_spawner.reset(new Spawner(m_scene));
 
-	m_deleteCommand = std::make_shared<RemoveEntity>( m_gameMap );
-	m_pathfindCommand = std::make_shared<PathfindCommand>( m_gameMap );
+	m_deleteCommand = std::make_shared<RemoveEntity>( m_scene );
+	m_pathfindCommand = std::make_shared<PathfindCommand>( m_scene );
 
-	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_gameMap, m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_gameMap, m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_gameMap, m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_gameMap, m_spawner));
-	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_gameMap, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<SlimeSpawnerCommand>(m_scene, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<SnakeSpawnerCommand>(m_scene, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<GodSpawnerCommand>(m_scene, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<DemonSpawnerCommand>(m_scene, m_spawner));
+	m_spawnerCommands.push_back(std::make_shared<MagnetoballSpawnerCommand>(m_scene, m_spawner));
 	m_spawnerCommands.push_back(m_pathfindCommand);
 	m_spawnerCommands.push_back(m_deleteCommand);
-	m_spawnerCommands.push_back(std::make_shared<MoveEntityCommand>(m_gameMap));
+	m_spawnerCommands.push_back(std::make_shared<MoveEntityCommand>(m_scene));
+	m_spawnerCommands.push_back(std::make_shared<WallSpawnerCommand>(m_scene, m_spawner));
 
 }
 
@@ -95,7 +96,7 @@ void MapScreen::render()
 	al_clear_to_color(al_map_rgb(255,255,255));
 	al_set_target_bitmap(al_get_backbuffer(m_game->display()));
 
-	m_gameMap->render();
+	m_scene->render();
 
 	m_game->m_camera1->bind();
 	char buffer[10];
@@ -139,7 +140,7 @@ void MapScreen::commandStep()
 	{
 		if( m_runningCommand->status() == Command::Status::Running )
 		{
-			Vec2i tile = m_gameMap->getTileAtIso(Input::GetMousePosition());
+			Vec2i tile = m_scene->getTileAtIso(Input::GetMousePosition());
 			(*m_runningCommand)(tile);
 			if( m_runningCommand->status() == Command::Status::Ready )
 			{

@@ -36,7 +36,7 @@ public:
 private:
 
 	LD36* m_game;
-	Scene::SharedPtr m_gameMap;
+	Scene::SharedPtr m_scene;
 	bool m_enableMouseTravel = true;
 	Spawner::SharedPtr m_spawner;
 	Command::SharedPtr m_runningCommand;
