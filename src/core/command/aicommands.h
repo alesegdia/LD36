@@ -76,15 +76,16 @@ public:
 		switch( m_status )
 		{
 		case 0: // select unit to move
+			status( Command::Status::Ready );
 			if( Input::IsMouseButtonJustPressed(1) )
 			{
 				m_selectedUnit = m_scene->getEntityAt( tile );
 				if( m_selectedUnit != nullptr )
 				{
 					m_status++;
+					status( Command::Status::Running );
 				}
 			}
-			status( Command::Status::Running );
 			break;
 		case 1: // select place to move and perform search
 			if( Input::IsMouseButtonJustPressed(1) && m_scene->isWalkableTile(tile) )
@@ -99,29 +100,37 @@ public:
 			status( Command::Status::Running );
 			break;
 		case 2: // move between nodes until reach
-			if( m_currentNode < m_path.size() - 1 )
+			if( m_path.size() > 0 )
 			{
-				if( m_transitioning >= 1.f )
+				if( m_currentNode < m_path.size() - 1 )
 				{
-					m_transitioning = 0;
-					m_fromTile = Vec2f( m_path[m_currentNode].x(), m_path[m_currentNode].y() );
-					m_toTile = Vec2f( m_path[m_currentNode+1].x(), m_path[m_currentNode+1].y() );
-					m_currentNode++;
+					if( m_transitioning >= 1.f )
+					{
+						m_transitioning = 0;
+						m_fromTile = Vec2f( m_path[m_currentNode].x(), m_path[m_currentNode].y() );
+						m_toTile = Vec2f( m_path[m_currentNode+1].x(), m_path[m_currentNode+1].y() );
+						m_currentNode++;
+					}
+					else
+					{
+						m_transitioning += 0.1f;
+						auto pos = lerp(m_fromTile, m_toTile, m_transitioning);
+						pos.set( pos.x() * 16, pos.y() * 16 );
+						m_selectedUnit->setPosition(Vec2f(pos.x(), pos.y()));
+					}
+					status( Command::Status::Running );
 				}
 				else
 				{
-					m_transitioning += 0.1f;
-					auto pos = lerp(m_fromTile, m_toTile, m_transitioning);
-					pos.set( pos.x() * 16, pos.y() * 16 );
-					m_selectedUnit->setPosition(Vec2f(pos.x(), pos.y()));
+					m_scene->repositionUnit( m_selectedUnit, Vec2f(m_toTile.x() * 16, m_toTile.y() * 16) );
+					status( Command::Status::Ready );
+					m_status++;
 				}
-				status( Command::Status::Running );
 			}
 			else
 			{
-				m_scene->repositionUnit( m_selectedUnit, Vec2f(m_toTile.x() * 16, m_toTile.y() * 16) );
-				status( Command::Status::Ready );
 				m_status++;
+				status( Command::Status::Ready );
 			}
 			break;
 		}

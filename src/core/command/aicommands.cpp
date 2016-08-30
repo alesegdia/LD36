@@ -12,9 +12,12 @@ std::vector<Vec2i> find_path(Scene::SharedPtr scene, Vec2i start_tile, Vec2i end
 	astar.restartSearch(start_node, target_node);
 	while( AStarSearchStatus::Running == astar.step() );
 	std::vector<Vec2i> nodes;
-	for( auto n : astar.solution() )
+	if( astar.status() != AStarSearchStatus::Blocked )
 	{
-		nodes.push_back(Vec2i( n->x(), n->y() ));
+		for( auto n : astar.solution() )
+		{
+			nodes.push_back(Vec2i( n->x(), n->y() ));
+		}
 	}
 	return nodes;
 }
