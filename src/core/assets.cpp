@@ -12,6 +12,9 @@ Assets::Assets()
 
 	charactersBitmap = al_load_bitmap("assets/characters.png");
 	charactersSheet.reset( new Spritesheet( 3, 3, charactersBitmap ));
+
+	objectsBitmap = al_load_bitmap("assets/objects.png");
+	objectsSheet.reset( new Spritesheet( 3, 3, objectsBitmap ));
 }
 
 Assets::~Assets()
