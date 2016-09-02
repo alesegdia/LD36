@@ -1,9 +1,5 @@
 # LD36
 
-## Linux requirements
+## Requirements
 
-
-```
-sudo apt-get install liballegro5.0 liballegro-acodec5.0 liballegro-audio5.0 \
-					 liballegro-image5.0 liballegro-ttf5.0
-```
+* allegro5.2
