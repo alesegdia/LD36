@@ -3,7 +3,7 @@
 rm -rf build/*
 cd build
 cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/mingw-toolchain.cmake ..
-make -j8
+make -j8 ld36
 cd ..
 
 zip pheee-win.zip bin/win32/* bin/win32/**/*
