@@ -6,6 +6,7 @@ add_subdirectory(module/alligator/)
 include_directories(module/alligator/src)
 
 add_subdirectory(module/astarcpp)
+add_subdirectory(module/enet)
 
 # common flags
 list(APPEND CMAKE_CXX_FLAGS "-std=c++11 -g -ftest-coverage -fprofile-arcs")
@@ -28,7 +29,9 @@ endif()
 function(add_alleg_target EXEC-NAME SRCS)
 	add_executable(${EXEC-NAME} ${CORE_SOURCES} ${ASTAR_SOURCES} ${SRCS})
 	include_directories(${EXEC-NAME} module/astarcpp/src)
+	include_directories(${EXEC-NAME} module/enet/include)
 	target_link_libraries(${EXEC-NAME} alligator)
+	target_link_libraries(${EXEC-NAME} enet)
 	if(WIN32)
 		target_link_libraries(${EXEC-NAME} allegro_monolith)
 	elseif(UNIX)
