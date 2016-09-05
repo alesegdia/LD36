@@ -51,6 +51,8 @@ set(CORE_NETWORK_SRC
 	src/core/network/packetbuilder.h
 	src/core/network/buffer.cpp
 	src/core/network/buffer.h
+	src/core/network/utils.cpp
+	src/core/network/utils.h
 	)
 
 set(CORE_COMMAND_SRC
@@ -75,6 +77,8 @@ set(CORE_SRC
 	src/core/gameconfig.h
 	src/core/ld36game.cpp
 	src/core/ld36game.h
+	src/core/textinputprocessor.cpp
+	src/core/textinputprocessor.h
 	)
 
 set(CORE_SOURCES
@@ -115,7 +119,9 @@ endfunction(add_alleg_target)
 
 add_alleg_target(ld36 src/game/game.cpp)
 add_alleg_target(editor src/editor/editor.cpp)
+add_alleg_target(server src/server/server.cpp)
 add_alleg_target(nonblock-server-test src/core/network/test/nonblock.cpp)
+add_alleg_target(nonblock-client-test src/core/network/test/nonblock.cpp)
 
 
 

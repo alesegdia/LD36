@@ -46,6 +46,7 @@ MapScreen::MapScreen( LD36* g )
 	m_spawnerCommands.push_back(std::make_shared<MoveEntityCommand>(m_scene));
 	m_spawnerCommands.push_back(std::make_shared<WallSpawnerCommand>(m_scene, m_spawner));
 
+	Input::AddInputProcessor( &m_textInput );
 }
 
 MapScreen::~MapScreen()
@@ -102,6 +103,9 @@ void MapScreen::render()
 	char buffer[10];
 	sprintf(buffer, "[%s]", m_spawnerCommands[m_selectedSpawner]->name().c_str());
 	al_draw_text(m_game->m_font, al_map_rgb(32, 128, 32), 0, 0, 0, buffer );
+
+	al_draw_text(m_game->m_font, al_map_rgb(32, 128, 32), 0, 20, 0, m_textInput.str() );
+
 }
 
 void MapScreen::hide()

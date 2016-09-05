@@ -15,6 +15,7 @@
 #include "../scene/spawner.h"
 #include "../command/spawncommands.h"
 #include "../command/aicommands.h"
+#include "../textinputprocessor.h"
 
 class LD36;
 
@@ -44,6 +45,7 @@ private:
 	int m_selectedSpawner;
 	Command::SharedPtr m_deleteCommand;
 	Command::SharedPtr m_pathfindCommand;
+	TextInputProcessor m_textInput;
 
 };
 
