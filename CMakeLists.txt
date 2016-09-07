@@ -43,8 +43,8 @@ set(CORE_SCREEN_SRC
 	)
 
 set(CORE_NETWORK_SRC
-	src/core/network/host.cpp
-	src/core/network/host.h
+	src/core/network/client.cpp
+	src/core/network/client.h
 	src/core/network/protocol.cpp
 	src/core/network/protocol.h
 	src/core/network/packetbuilder.cpp
@@ -53,6 +53,10 @@ set(CORE_NETWORK_SRC
 	src/core/network/buffer.h
 	src/core/network/utils.cpp
 	src/core/network/utils.h
+	src/core/network/config.cpp
+	src/core/network/config.h
+	src/core/network/netthread.cpp
+	src/core/network/netthread.h
 	)
 
 set(CORE_COMMAND_SRC
@@ -120,8 +124,6 @@ endfunction(add_alleg_target)
 add_alleg_target(ld36 src/game/game.cpp)
 add_alleg_target(editor src/editor/editor.cpp)
 add_alleg_target(server src/server/server.cpp)
-add_alleg_target(nonblock-server-test src/core/network/test/nonblock.cpp)
-add_alleg_target(nonblock-client-test src/core/network/test/nonblock.cpp)
 
 
 
