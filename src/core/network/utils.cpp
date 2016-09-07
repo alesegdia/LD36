@@ -1,9 +1,9 @@
 
 #include "utils.h"
 
-Host::SharedPtr netutils_create_host_from_args(int argc, char **argv)
+Client::SharedPtr netutils_create_host_from_args(int argc, char **argv)
 {
-	Host::SharedPtr host = nullptr;
+	Client::SharedPtr host = nullptr;
 
 	if( argc != 2 )
 	{
@@ -12,8 +12,7 @@ Host::SharedPtr netutils_create_host_from_args(int argc, char **argv)
 	}
 
 	const char* server_ip = argv[1];
-	printf("connecting to %s\n", server_ip);
-	host = std::make_shared<Host>(server_ip);
+	host = std::make_shared<Client>(server_ip);
 
 	return host;
 }
