@@ -3,9 +3,9 @@
 
 #include <allegro5/allegro_ttf.h>
 
+#include "network/utils.h"
 #include "screen/menuscreen.h"
 #include "screen/mapscreen.h"
-
 #include "gameconfig.h"
 
 LD36::LD36(int sw, int sh, bool editor)
@@ -23,7 +23,7 @@ LD36::~LD36()
 
 }
 
-void LD36::create()
+int LD36::create( int argc, char** argv )
 {
 	Assets::Initialize();
 
@@ -44,6 +44,29 @@ void LD36::create()
 	setScreen(m_mapScreen);
 
 	ungrabMouse();
+
+	if( enet_initialize() != 0 )
+	{
+		std::cerr << "Couldn't initialize enet.\n" << std::endl;
+		return -1;
+	}
+
+	atexit(enet_deinitialize);
+
+	m_host = netutils_create_host_from_args(argc, argv);
+
+	if( nullptr == m_host )
+	{
+		return -1;
+	}
+
+	if( false == m_host->isPeerConnected() )
+	{
+		std::cerr << "Couldn't acquire a peer" << std::endl;
+		return -1;
+	}
+
+	return 0;
 }
 
 void LD36::dispose()

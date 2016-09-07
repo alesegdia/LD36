@@ -8,6 +8,8 @@
 #include <alligator/game/iscreen.h>
 #include <alligator/camera/camera.h>
 
+#include "network/client.h"
+
 class MenuScreen;
 class MapScreen;
 
@@ -18,7 +20,7 @@ public:
 	LD36 ( int sw, int sh, bool editor = true );
 	virtual ~LD36();
 
-	void create() override ;
+	int create(int argc, char **argv) override ;
 	void dispose() override ;
 	void update(double delta) override ;
 
@@ -37,6 +39,7 @@ public:
 
 private:
 	bool m_editor;
+	Client::SharedPtr m_host;
 
 };
 
