@@ -1,6 +1,6 @@
 #pragma once
 
-#include "host.h"
+#include "client.h"
 #include <cstdio>
 
-Host::SharedPtr netutils_create_host_from_args( int argc, char** argv );
+Client::SharedPtr netutils_create_host_from_args( int argc, char** argv );
