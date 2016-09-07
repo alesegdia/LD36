@@ -1,11 +1,41 @@
 #include <enet/enet.h>
 #include <iostream>
 
+#include "../core/network/config.h"
+
+enum class GameState
+{
+	Disconnected,
+		// The player is not connected
+	WaitingLobby,
+		// The player isn't able to perform any action, just wait for the server to send the signal.
+	Ready,
+		// The player marks itself as ready and send a packet to the server to tell him.
+		// When all players are ready, the server decidesturns randomly and the game starts
+	MyTurn,
+		// When the state is MyTurn, the player will be able to perform actions,
+		// Delegates control of correct turn points and all the logic to the client, who sends packages
+		// defined at core/network/protocol.h
+
+	OtherTurn
+		// When the state is OtherTurn, the player will only be able to chat.
+		// The client will receive and interpret packets defined at core/network/protocol.h
+};
+
+/**
+ * The player who starts the game is the player with the id set to zero. All the players
+ */
+
+// ask at enet: 1) no need to destroy sent package?
+//				2) can't remember right now
+
 int main( int argc, char** argv )
 {
 	ENetAddress address;
 	ENetHost* host;
 	ENetEvent event;
+
+	int last_player_id = 0 ;
 
 	if( enet_initialize() != 0 )
 	{
@@ -14,8 +44,9 @@ int main( int argc, char** argv )
 	}
 	atexit(enet_deinitialize);
 
-	address.host = ENET_HOST_ANY;
-	address.port = 4943;
+	//address.host = "127.0.0.1";
+	enet_address_set_host(&address, "127.0.0.1");
+	address.port = NetworkConfig::Port;
 
 	host = enet_host_create( &address,	// the address to bind the server host to
 							 32,		// allow up to 32 clients and/or outgoing connections
@@ -32,13 +63,14 @@ int main( int argc, char** argv )
 
 	while( true )
 	{
-		while( enet_host_service( host, &event, 1000 ) > 0 )
+		while( enet_host_service( host, &event, 5000 ) > 0 )
 		{
+			std::cout << "event!" << std::endl;
 			switch( event.type )
 			{
 			case ENET_EVENT_TYPE_CONNECT:
 				std::cout << "New connection from "
-					<< std::hex << event.peer->address.host << std::endl;
+					<< event.peer->address.host << std::endl;
 				break;
 
 			case ENET_EVENT_TYPE_RECEIVE:
@@ -50,6 +82,10 @@ int main( int argc, char** argv )
 			case ENET_EVENT_TYPE_DISCONNECT:
 				std::cout << event.peer->data << " disconnected." << std::endl;
 				event.peer->data = NULL;
+				break;
+
+			case ENET_EVENT_TYPE_NONE:
+				std::cout << "none event" << std::endl;
 				break;
 			}
 		}
