@@ -1,30 +1,8 @@
 #include <enet/enet.h>
 #include <iostream>
 
-#include "../core/network/config.h"
+#include "../core/network/protocol.h"
 
-enum class GameState
-{
-	Disconnected,
-		// The player is not connected
-	WaitingLobby,
-		// The player isn't able to perform any action, just wait for the server to send the signal.
-	Ready,
-		// The player marks itself as ready and send a packet to the server to tell him.
-		// When all players are ready, the server decidesturns randomly and the game starts
-	MyTurn,
-		// When the state is MyTurn, the player will be able to perform actions,
-		// Delegates control of correct turn points and all the logic to the client, who sends packages
-		// defined at core/network/protocol.h
-
-	OtherTurn
-		// When the state is OtherTurn, the player will only be able to chat.
-		// The client will receive and interpret packets defined at core/network/protocol.h
-};
-
-/**
- * The player who starts the game is the player with the id set to zero. All the players
- */
 
 // ask at enet: 1) no need to destroy sent package?
 //				2) can't remember right now

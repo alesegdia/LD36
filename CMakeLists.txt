@@ -53,8 +53,6 @@ set(CORE_NETWORK_SRC
 	src/core/network/buffer.h
 	src/core/network/utils.cpp
 	src/core/network/utils.h
-	src/core/network/config.cpp
-	src/core/network/config.h
 	src/core/network/netthread.cpp
 	src/core/network/netthread.h
 	)
