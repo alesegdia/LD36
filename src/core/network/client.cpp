@@ -21,11 +21,11 @@ Client::Client(const char *ip)
 			event.type == ENET_EVENT_TYPE_CONNECT)
 	{
 		std::cout << "Connection to " << ip << ":" << NetworkConfig::Port << " succeeded." << std::endl;
-		ENetPacket * packet = enet_packet_create ("packet",
-												  strlen ("packet") + 1,
-												  ENET_PACKET_FLAG_RELIABLE);
-		enet_peer_send( m_peer, 0, packet);
-		enet_host_flush(m_host);
+
+		if( enet_host_service( m_host, &event, 5000 ) > 0 && event.type == ENET_EVENT_TYPE_RECEIVE )
+		{
+			std::cout << "Assigned ID: " << int(event.packet->data[1]) << std::endl;
+		}
 	}
 	else
 	{

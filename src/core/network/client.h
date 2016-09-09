@@ -4,7 +4,7 @@
 
 #include <enet/enet.h>
 
-#include "config.h"
+#include "protocol.h"
 
 class Client
 {
