@@ -1,11 +1,13 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdlib>
 
 class NetworkConfig
 {
 public:
 	static constexpr int Port = 9838;
+	static constexpr size_t NumClients = 32;
 };
 
 /**
@@ -87,7 +89,10 @@ Elements enclosed in [square brackets] are optional.
 
 enum class PacketType : uint8_t
 {
-	StartGame = 0,
+	AssignID = 0,
+		/**   PTID | player_id			- ID assigned to the player */
+
+	StartGame,
 		/**   PTID | starter_id
 			starter_id					- ID of the player who starts (chosen randomly by the server) */
 
