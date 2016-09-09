@@ -40,6 +40,8 @@ set(CORE_SCREEN_SRC
 	src/core/screen/mapscreen.h
 	src/core/screen/menuscreen.cpp
 	src/core/screen/menuscreen.h
+	src/core/screen/lobbyscreen.cpp
+	src/core/screen/lobbyscreen.h
 	)
 
 set(CORE_NETWORK_SRC
@@ -119,9 +121,15 @@ function(add_alleg_target EXEC-NAME SRCS)
 	endif()
 endfunction(add_alleg_target)
 
-add_alleg_target(ld36 src/game/game.cpp)
-add_alleg_target(editor src/editor/editor.cpp)
-add_alleg_target(server src/server/server.cpp)
+add_alleg_target(ld36
+	src/game/game.cpp)
+
+add_alleg_target(editor
+	src/editor/editor.cpp)
+
+add_alleg_target(server
+	src/server/server.cpp
+	src/server/server.h)
 
 
 
