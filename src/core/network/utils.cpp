@@ -12,7 +12,8 @@ Client::SharedPtr netutils_create_host_from_args(int argc, char **argv)
 	}
 
 	const char* server_ip = argv[1];
-	host = std::make_shared<Client>(server_ip);
+	host = std::make_shared<Client>();
+	host->connect(server_ip);
 
 	return host;
 }

@@ -12,13 +12,14 @@ public:
 	typedef std::shared_ptr<Client> SharedPtr;
 
 	// CLIENT
-	Client( const char* ip );
+	Client();
 
 	~Client();
 
 	bool isHostCreated();
 
 	bool isPeerConnected();
+	bool connect( const char* ip );
 
 private:
 

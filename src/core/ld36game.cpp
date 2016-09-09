@@ -53,8 +53,10 @@ int LD36::create( int argc, char** argv )
 
 	atexit(enet_deinitialize);
 
-	m_host = netutils_create_host_from_args(argc, argv);
+	//m_host = netutils_create_host_from_args(argc, argv);
+	m_host = std::make_shared<Client>();
 
+	/*
 	if( nullptr == m_host )
 	{
 		return -1;
@@ -65,6 +67,7 @@ int LD36::create( int argc, char** argv )
 		std::cerr << "Couldn't acquire a peer" << std::endl;
 		return -1;
 	}
+	*/
 
 	return 0;
 }
