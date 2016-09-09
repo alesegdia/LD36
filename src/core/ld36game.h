@@ -9,9 +9,11 @@
 #include <alligator/camera/camera.h>
 
 #include "network/client.h"
+#include "network/protocol.h"
 
 class MenuScreen;
 class MapScreen;
+class LobbyScreen;
 
 class LD36 : public Game {
 
@@ -26,6 +28,7 @@ public:
 
 	// all screens
 	std::shared_ptr<MenuScreen> m_menuScreen;
+	std::shared_ptr<LobbyScreen> m_lobbyScreen;
 	std::shared_ptr<MapScreen> m_mapScreen;
 
 	ALLEGRO_FONT* m_font = nullptr;
@@ -35,11 +38,23 @@ public:
 	Camera::SharedPtr m_camera2;
 	Camera::SharedPtr m_camera3;
 
+	Client::SharedPtr m_host;
+
+	GameState state()
+	{
+		return m_gameState;
+	}
+
+	void state( GameState gs )
+	{
+		m_gameState = gs;
+	}
+
 	bool editor();
 
 private:
 	bool m_editor;
-	Client::SharedPtr m_host;
+	GameState m_gameState = GameState::Disconnected;
 
 };
 

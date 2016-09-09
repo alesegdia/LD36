@@ -6,6 +6,7 @@
 #include "network/utils.h"
 #include "screen/menuscreen.h"
 #include "screen/mapscreen.h"
+#include "screen/lobbyscreen.h"
 #include "gameconfig.h"
 
 LD36::LD36(int sw, int sh, bool editor)
@@ -38,10 +39,11 @@ int LD36::create( int argc, char** argv )
 		fprintf(stderr, "Failed to load font!\n");
 	}
 
+	m_lobbyScreen.reset(new LobbyScreen(this));
 	m_menuScreen.reset(new MenuScreen(this));
 	m_mapScreen.reset(new MapScreen(this));
 
-	setScreen(m_mapScreen);
+	setScreen(m_lobbyScreen);
 
 	ungrabMouse();
 
