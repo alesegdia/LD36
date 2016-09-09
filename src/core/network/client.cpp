@@ -18,12 +18,15 @@ Client::~Client()
 	if( nullptr != m_host )
 	{
 		ENetEvent event;
-		enet_peer_disconnect(m_peer, 123);
-		while( enet_host_service(m_host, &event, 5000) > 0 )
+		if( m_peer != nullptr )
 		{
-			if( event.type == ENET_EVENT_TYPE_DISCONNECT )
+			enet_peer_disconnect(m_peer, 123);
+			while( enet_host_service(m_host, &event, 5000) > 0 )
 			{
-				break;
+				if( event.type == ENET_EVENT_TYPE_DISCONNECT )
+				{
+					break;
+				}
 			}
 		}
 		enet_host_destroy(m_host);
