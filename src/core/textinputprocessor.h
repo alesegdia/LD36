@@ -26,9 +26,13 @@ public:
 		{
 			pushChar( char(key - ALLEGRO_KEY_A) + (m_mayus?'A':'a') );
 		}
-		if( key >= ALLEGRO_KEY_0 && key <= ALLEGRO_KEY_9 )
+		else if( key >= ALLEGRO_KEY_0 && key <= ALLEGRO_KEY_9 )
 		{
 			pushChar( char(key - ALLEGRO_KEY_0) + '0' );
+		}
+		else if( key == ALLEGRO_KEY_FULLSTOP )
+		{
+			pushChar( '.' );
 		}
 		else if( key == ALLEGRO_KEY_SPACE )
 		{
