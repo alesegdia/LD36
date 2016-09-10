@@ -44,7 +44,6 @@ int LD36::create( int argc, char** argv )
 	m_mapScreen.reset(new MapScreen(this));
 
 	setScreen(m_lobbyScreen);
-
 	ungrabMouse();
 
 	if( enet_initialize() != 0 )
@@ -58,19 +57,6 @@ int LD36::create( int argc, char** argv )
 	//m_host = netutils_create_host_from_args(argc, argv);
 	m_host = std::make_shared<Client>();
 
-	/*
-	if( nullptr == m_host )
-	{
-		return -1;
-	}
-
-	if( false == m_host->isPeerConnected() )
-	{
-		std::cerr << "Couldn't acquire a peer" << std::endl;
-		return -1;
-	}
-	*/
-
 	return 0;
 }
 
@@ -79,6 +65,7 @@ void LD36::dispose()
 	Assets::Dispose();
 	m_menuScreen.reset();
 	m_mapScreen.reset();
+	m_lobbyScreen.reset();
 	al_destroy_font(m_font);
 	al_destroy_font(m_fontBig);
 }
