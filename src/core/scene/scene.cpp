@@ -12,7 +12,7 @@ Scene::Scene(Tilemap::SharedPtr map, Camera::SharedPtr map_camera)
 	  m_mapCamera(map_camera)
 {
 	m_entityMatrix.reset(new EntityMatrix(m_floorMap->cols(), m_floorMap->rows(), nullptr));
-	m_floorMapRenderer.reset(new IsometricTileMapRenderer(map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
+	m_floorMapRenderer.reset(new MapRenderer(map, Assets::instance->mapTiles, GameConfig::ISO_TILE_SIZE));
 
 }
 

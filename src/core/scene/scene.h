@@ -59,10 +59,10 @@ private:
 	EntityMatrix::SharedPtr m_entityMatrix;
 
 	Tilemap::SharedPtr m_floorMap;
-	IsometricTileMapRenderer::SharedPtr m_floorMapRenderer;
+	MapRenderer::SharedPtr m_floorMapRenderer;
 
 	Tilemap::SharedPtr m_overlayMap;
-	IsometricTileMapRenderer::SharedPtr m_overlayMapRenderer;
+	MapRenderer::SharedPtr m_overlayMapRenderer;
 
 	Camera::SharedPtr m_mapCamera;
 
