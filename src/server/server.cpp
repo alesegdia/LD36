@@ -53,7 +53,7 @@ int main( int argc, char** argv )
 		if( state == ServerState::AwaitingConnections )
 		{
 			bool all_ready = true;
-			for( int i = 0; i < std::max(uint8_t(1), last_player_id); i++ )
+			for( int i = 1; i <= std::max(uint8_t(2), last_player_id); i++ )
 			{
 				if( players_ready[i] == false )
 				{
@@ -64,7 +64,9 @@ int main( int argc, char** argv )
 
 			if( all_ready )
 			{
+				std::cout << "All ready... Starting game!" << std::endl;
 				state = ServerState::Game;
+				sv_broadcast_startgame( host, 1 );
 			}
 		}
 
@@ -87,12 +89,7 @@ int main( int argc, char** argv )
 						assert( event.packet->dataLength == 2 );
 						size_t player_id = event.packet->data[1];
 						players_ready[player_id] = !players_ready[player_id];
-					}
-					if( uint8_t(PacketType::ChatMessage) == event.packet->data[0] )
-					{
-						std::cout << "Msg: " << event.packet->data << std::endl;
-						enet_host_broadcast( host, 0, event.packet );
-						enet_host_flush( host );
+						std::cout << "Player " << int(player_id) << " ready." << std::endl;
 					}
 					break;
 

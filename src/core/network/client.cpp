@@ -59,6 +59,7 @@ bool Client::connect(const char *ip)
 		if( enet_host_service( m_host, &event, 1000 ) > 0 && event.type == ENET_EVENT_TYPE_RECEIVE )
 		{
 			std::cout << "Assigned ID: " << int(event.packet->data[1]) << std::endl;
+			m_playerID = event.packet->data[1];
 		}
 		else
 		{
@@ -73,6 +74,24 @@ bool Client::connect(const char *ip)
 		return false;
 	}
 	return true;
+}
+
+void Client::sendReady()
+{
+	uint8_t data[2] = { uint8_t(PacketType::Ready), m_playerID };
+	ENetPacket* packet = enet_packet_create(data, 2, ENET_PACKET_FLAG_RELIABLE);
+	enet_peer_send( m_peer, 0, packet );
+	enet_host_flush( m_host );
+}
+
+bool Client::hasGameStarted()
+{
+	ENetEvent event;
+	if( enet_host_service( m_host, &event, 0 ) && event.type == ENET_EVENT_TYPE_RECEIVE )
+	{
+		return true;
+	}
+	return false;
 }
 
 void Client::createHost()
