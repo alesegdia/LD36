@@ -100,10 +100,10 @@ void MapScreen::render()
 	m_scene->render();
 
 	m_game->m_camera1->bind();
-	char buffer[10];
-	sprintf(buffer, "[%s]", m_spawnerCommands[m_selectedSpawner]->name().c_str());
+	static constexpr size_t BufferSize = 32;
+	char buffer[BufferSize];
+	snprintf(buffer, BufferSize, "[%s]", m_spawnerCommands[m_selectedSpawner]->name().c_str());
 	al_draw_text(m_game->m_font, al_map_rgb(32, 128, 32), 0, 0, 0, buffer );
-
 	al_draw_text(m_game->m_font, al_map_rgb(32, 128, 32), 0, 20, 0, m_textInput.str() );
 
 }
