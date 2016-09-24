@@ -58,6 +58,8 @@ set(CORE_NETWORK_SRC
 	)
 
 set(CORE_COMMAND_SRC
+	src/core/command/commandprocessor.cpp
+	src/core/command/commandprocessor.h
 	src/core/command/aicommands.cpp
 	src/core/command/aicommands.h
 	src/core/command/astartilemapmodel.cpp
@@ -119,7 +121,7 @@ function(add_alleg_target EXEC-NAME SRCS)
 	endif()
 endfunction(add_alleg_target)
 
-add_alleg_target(ld36
+add_alleg_target(game
 	src/game/game.cpp)
 
 add_alleg_target(editor
