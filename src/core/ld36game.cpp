@@ -9,12 +9,13 @@
 #include "screen/lobbyscreen.h"
 #include "gameconfig.h"
 
-LD36::LD36(int sw, int sh, bool editor)
+LD36::LD36(int sw, int sh, bool editor, bool single)
 	: Game( sw, sh ),
 	  m_camera1(new Camera(Vec2f(sw, sh))),
 	  m_camera2(new Camera(Vec2f(sw, sh))),
 	  m_camera3(new Camera(Vec2f(sw, sh))),
-	  m_editor(editor)
+	  m_editor(editor),
+	  m_single(single)
 {
 
 }
@@ -39,11 +40,19 @@ int LD36::create( int argc, char** argv )
 		fprintf(stderr, "Failed to load font!\n");
 	}
 
-	m_lobbyScreen.reset(new LobbyScreen(this));
-	m_menuScreen.reset(new MenuScreen(this));
-	m_mapScreen.reset(new MapScreen(this));
+	m_lobbyScreen.reset( new LobbyScreen(this) );
+	m_menuScreen.reset( new MenuScreen(this) );
+	m_mapScreen.reset( new MapScreen(this) );
 
-	setScreen(m_lobbyScreen);
+	if( m_single )
+	{
+		setScreen( m_mapScreen );
+	}
+	else
+	{
+		setScreen( m_lobbyScreen );
+	}
+
 	ungrabMouse();
 
 	if( enet_initialize() != 0 )

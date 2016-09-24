@@ -19,7 +19,7 @@ class LD36 : public Game {
 
 public:
 
-	LD36 ( int sw, int sh, bool editor = true );
+	LD36 (int sw, int sh, bool editor = true , bool single = false);
 	virtual ~LD36();
 
 	int create(int argc, char **argv) override ;
@@ -51,9 +51,14 @@ public:
 	}
 
 	bool editor();
+	void network()
+	{
+		//Buffer* buffer = m_host->pollEvent();
+	}
 
 private:
 	bool m_editor;
+	bool m_single;
 	GameState m_gameState = GameState::Disconnected;
 
 };

@@ -20,7 +20,7 @@
 LobbyScreen::LobbyScreen( LD36* g )
 	: m_game(g)
 {
-	Input::AddInputProcessor( &m_textInput );
+
 }
 
 LobbyScreen::~LobbyScreen()
@@ -30,7 +30,12 @@ LobbyScreen::~LobbyScreen()
 
 void LobbyScreen::show()
 {
+	Input::AddInputProcessor( &m_textInput );
+}
 
+void LobbyScreen::hide()
+{
+	Input::RemoveInputProcessor( &m_textInput );
 }
 
 void LobbyScreen::update(double delta)
@@ -103,8 +108,4 @@ void LobbyScreen::render()
 
 }
 
-void LobbyScreen::hide()
-{
-
-}
 
