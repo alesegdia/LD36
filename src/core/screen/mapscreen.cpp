@@ -140,27 +140,12 @@ void MapScreen::editorStep()
 
 void MapScreen::commandStep()
 {
-	if( m_runningCommand != nullptr )
-	{
-		if( m_runningCommand->status() == Command::Status::Running )
-		{
-			Vec2i tile = m_scene->getTileAtIso(Input::GetMousePosition());
-			(*m_runningCommand)(tile);
-			if( m_runningCommand->status() == Command::Status::Ready )
-			{
-				m_runningCommand = nullptr;
-			}
-		}
-	}
+	m_commandProcessor.step( m_scene->getTileAtIso(Input::GetMousePosition()) );
 }
 
-void MapScreen::tryEnqueueCommand(Command::SharedPtr cmd)
+void MapScreen::tryEnqueueCommand( Command::SharedPtr cmd )
 {
-	if( m_runningCommand == nullptr || m_runningCommand->status() == Command::Status::Ready )
-	{
-		m_runningCommand = cmd;
-		m_runningCommand->reset();
-	}
+	m_commandProcessor.tryEnqueueCommand( cmd );
 }
 
 

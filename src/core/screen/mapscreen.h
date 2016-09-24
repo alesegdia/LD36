@@ -15,6 +15,7 @@
 #include "../scene/spawner.h"
 #include "../command/spawncommands.h"
 #include "../command/aicommands.h"
+#include "../command/commandprocessor.h"
 #include "../textinputprocessor.h"
 
 class LD36;
@@ -30,22 +31,23 @@ public:
 	void render() override ;
 	void hide() override ;
 
+
+private:
 	void editorStep();
 	void commandStep();
 	void tryEnqueueCommand( Command::SharedPtr cmd );
-
-private:
 
 	LD36* m_game;
 	Scene::SharedPtr m_scene;
 	bool m_enableMouseTravel = true;
 	Spawner::SharedPtr m_spawner;
-	Command::SharedPtr m_runningCommand;
+	SingleCommandProcessor m_commandProcessor;
 	std::vector<Command::SharedPtr> m_spawnerCommands;
 	int m_selectedSpawner;
 	Command::SharedPtr m_deleteCommand;
 	Command::SharedPtr m_pathfindCommand;
 	TextInputProcessor m_textInput;
+
 
 };
 
