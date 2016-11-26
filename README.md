@@ -1,4 +1,4 @@
-# LD36
+# summoning
 
 ## Requirements
 
