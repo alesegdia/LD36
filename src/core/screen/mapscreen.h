@@ -38,15 +38,17 @@ private:
 	void tryEnqueueCommand( Command::SharedPtr cmd );
 
 	LD36* m_game;
-	Scene::SharedPtr m_scene;
+
 	bool m_enableMouseTravel = true;
+	Scene::SharedPtr m_scene;
+	TextInputProcessor m_textInput;
+
 	Spawner::SharedPtr m_spawner;
 	SingleCommandProcessor m_commandProcessor;
 	std::vector<Command::SharedPtr> m_spawnerCommands;
 	int m_selectedSpawner;
 	Command::SharedPtr m_deleteCommand;
 	Command::SharedPtr m_pathfindCommand;
-	TextInputProcessor m_textInput;
 
 
 };
